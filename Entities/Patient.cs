@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HeroMed_API.Entities.RelationsEntity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HeroMed_API.Entities
@@ -40,5 +41,11 @@ namespace HeroMed_API.Entities
         [Required(ErrorMessage = "Issue details is a required field!")]
         public string IssueDetails { get; set; }
 
+        [Required(ErrorMessage = "Enroled date is a required field!")]
+        public DateTimeOffset EnrolledDate { get; set; }
+
+        [Required(ErrorMessage = "Discharge date is a required field!")]
+        public DateTimeOffset DischargeDate { get; set; }
+        public ICollection<PatientEmployee> PatientEmployees { get; set; }
     }
 }

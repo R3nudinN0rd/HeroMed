@@ -76,6 +76,10 @@ namespace HeroMed_API.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("SalaryCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("SectionId")
                         .HasColumnType("uniqueidentifier");
 
@@ -107,6 +111,7 @@ namespace HeroMed_API.Migrations
                             PhoneNumber = "+40712345678",
                             PlaceOfBirth = "Arges, Pitesti, Strada Mioarei Nr. 1",
                             Salary = 7200m,
+                            SalaryCurrency = "RON",
                             SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb82"),
                             SeniorityYears = 4
                         },
@@ -126,6 +131,7 @@ namespace HeroMed_API.Migrations
                             PhoneNumber = "+40723456789",
                             PlaceOfBirth = "Bucurest, Sectorul 1, O strada nr 3",
                             Salary = 29000m,
+                            SalaryCurrency = "RON",
                             SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb83"),
                             SeniorityYears = 22
                         },
@@ -145,6 +151,7 @@ namespace HeroMed_API.Migrations
                             PhoneNumber = "+40712345678",
                             PlaceOfBirth = "Arges, Pitesti, Strada Mioarei Nr. 1",
                             Salary = 7200m,
+                            SalaryCurrency = "RON",
                             SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
                             SeniorityYears = 4
                         });
@@ -238,6 +245,211 @@ namespace HeroMed_API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("HeroMed_API.Entities.Patient", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("BirthDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("DischargeDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmergencyContactName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmergencyContactPhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("EnrolledDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IssueDetails")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SalonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SalonId");
+
+                    b.ToTable("Patient");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
+                            Address = "Str. Nicolae Balcescu, Nr. 189, Blc. L6, Sc. A, Ap. 20",
+                            BirthDate = new DateTimeOffset(new DateTime(1999, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DischargeDate = new DateTimeOffset(new DateTime(2022, 12, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "mircea.popa@gmail.com",
+                            EmergencyContactName = "Rares Popa",
+                            EmergencyContactPhoneNumber = "0752345678",
+                            EnrolledDate = new DateTimeOffset(new DateTime(2022, 11, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            FirstName = "Mircea",
+                            IssueDetails = "Some disease details.",
+                            LastName = "Popa",
+                            PhoneNumber = "0751234567",
+                            SalonId = new Guid("46589e47-e79f-417f-9e1a-410dd719f0e8")
+                        },
+                        new
+                        {
+                            Id = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08743"),
+                            Address = "Str. Nicolae Balcescu, Nr. 1, Blc. L4, Sc. B, Ap. 14",
+                            BirthDate = new DateTimeOffset(new DateTime(1997, 3, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            DischargeDate = new DateTimeOffset(new DateTime(2022, 12, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "mircea.popa@gmail.com",
+                            EmergencyContactName = "Rares Voicu",
+                            EmergencyContactPhoneNumber = "0752345123",
+                            EnrolledDate = new DateTimeOffset(new DateTime(2022, 11, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            FirstName = "Radu",
+                            IssueDetails = "Some disease details. 2",
+                            LastName = "Voicu",
+                            PhoneNumber = "0752234567",
+                            SalonId = new Guid("46589e47-e79f-417f-9e1a-410dd719f0e8")
+                        },
+                        new
+                        {
+                            Id = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08744"),
+                            Address = "Str. Nicolae Balcescu, Nr. 189, Blc. L6, Sc. A, Ap. 20",
+                            BirthDate = new DateTimeOffset(new DateTime(2001, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            DischargeDate = new DateTimeOffset(new DateTime(2022, 12, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "mircea.popa@gmail.com",
+                            EmergencyContactName = "Rares Popa",
+                            EmergencyContactPhoneNumber = "0758765432",
+                            EnrolledDate = new DateTimeOffset(new DateTime(2022, 11, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            FirstName = "Mircea2",
+                            IssueDetails = "Some disease details.",
+                            LastName = "Popa2",
+                            PhoneNumber = "0751232222",
+                            SalonId = new Guid("46589e47-e79f-417f-9e1a-410dd719f0e8")
+                        });
+                });
+
+            modelBuilder.Entity("HeroMed_API.Entities.RelationsEntity.PatientEmployee", b =>
+                {
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PatientId", "EmployeeId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("PatientEmployee");
+
+                    b.HasData(
+                        new
+                        {
+                            PatientId = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b622")
+                        },
+                        new
+                        {
+                            PatientId = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621")
+                        },
+                        new
+                        {
+                            PatientId = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620")
+                        },
+                        new
+                        {
+                            PatientId = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08743"),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621")
+                        },
+                        new
+                        {
+                            PatientId = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08743"),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620")
+                        },
+                        new
+                        {
+                            PatientId = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08744"),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620")
+                        });
+                });
+
+            modelBuilder.Entity("HeroMed_API.Entities.Salon", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Available")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Beds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Floor")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("Salon");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("46589e47-e79f-417f-9e1a-410dd719f0e6"),
+                            Available = true,
+                            Beds = 4,
+                            Floor = 2,
+                            SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb82")
+                        },
+                        new
+                        {
+                            Id = new Guid("46589e47-e79f-417f-9e1a-410dd719f0e7"),
+                            Available = true,
+                            Beds = 3,
+                            Floor = 1,
+                            SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb83")
+                        },
+                        new
+                        {
+                            Id = new Guid("46589e47-e79f-417f-9e1a-410dd719f0e8"),
+                            Available = true,
+                            Beds = 4,
+                            Floor = 1,
+                            SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb83")
+                        });
+                });
+
             modelBuilder.Entity("HeroMed_API.Entities.Section", b =>
                 {
                     b.Property<Guid>("Id")
@@ -325,7 +537,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9246"),
                             Admin = true,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 11, 22, 20, 15, 20, 364, DateTimeKind.Unspecified).AddTicks(493), new TimeSpan(0, 2, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 23, 27, 1, 405, DateTimeKind.Unspecified).AddTicks(4541), new TimeSpan(0, 2, 0, 0, 0)),
                             EmployeeId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Password = "admin",
                             Username = "admin"
@@ -334,7 +546,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9247"),
                             Admin = false,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 11, 22, 20, 15, 20, 364, DateTimeKind.Unspecified).AddTicks(504), new TimeSpan(0, 2, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 23, 27, 1, 405, DateTimeKind.Unspecified).AddTicks(4555), new TimeSpan(0, 2, 0, 0, 0)),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620"),
                             Password = "OParola",
                             Username = "UnUSername"
@@ -343,7 +555,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9248"),
                             Admin = false,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 11, 22, 20, 15, 20, 364, DateTimeKind.Unspecified).AddTicks(508), new TimeSpan(0, 2, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 23, 27, 1, 405, DateTimeKind.Unspecified).AddTicks(4559), new TimeSpan(0, 2, 0, 0, 0)),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621"),
                             Password = "AltaParola",
                             Username = "AltUSername"
@@ -359,12 +571,53 @@ namespace HeroMed_API.Migrations
                         .IsRequired();
 
                     b.HasOne("HeroMed_API.Entities.Section", "Section")
-                        .WithMany("Sections")
+                        .WithMany("Employees")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Job");
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("HeroMed_API.Entities.Patient", b =>
+                {
+                    b.HasOne("HeroMed_API.Entities.Salon", "Salon")
+                        .WithMany("Patient")
+                        .HasForeignKey("SalonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Salon");
+                });
+
+            modelBuilder.Entity("HeroMed_API.Entities.RelationsEntity.PatientEmployee", b =>
+                {
+                    b.HasOne("HeroMed_API.Entities.Patient", "Patient")
+                        .WithMany("PatientEmployees")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HeroMed_API.Entities.Employee", "Employee")
+                        .WithMany("EmployeePatients")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("HeroMed_API.Entities.Salon", b =>
+                {
+                    b.HasOne("HeroMed_API.Entities.Section", "Section")
+                        .WithMany("Salon")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Section");
                 });
@@ -382,6 +635,8 @@ namespace HeroMed_API.Migrations
 
             modelBuilder.Entity("HeroMed_API.Entities.Employee", b =>
                 {
+                    b.Navigation("EmployeePatients");
+
                     b.Navigation("User")
                         .IsRequired();
                 });
@@ -391,9 +646,21 @@ namespace HeroMed_API.Migrations
                     b.Navigation("Employees");
                 });
 
+            modelBuilder.Entity("HeroMed_API.Entities.Patient", b =>
+                {
+                    b.Navigation("PatientEmployees");
+                });
+
+            modelBuilder.Entity("HeroMed_API.Entities.Salon", b =>
+                {
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("HeroMed_API.Entities.Section", b =>
                 {
-                    b.Navigation("Sections");
+                    b.Navigation("Employees");
+
+                    b.Navigation("Salon");
                 });
 #pragma warning restore 612, 618
         }

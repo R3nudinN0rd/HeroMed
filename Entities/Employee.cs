@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HeroMed_API.Entities.RelationsEntity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HeroMed_API.Entities
@@ -60,6 +61,7 @@ namespace HeroMed_API.Entities
         public string DocumentsPath { get; set; }
 
         public User User { get; set; }
+        public ICollection<PatientEmployee> EmployeePatients { get; set; }
 
     }
 }
