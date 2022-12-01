@@ -1,4 +1,8 @@
 using HeroMed_API.DatabaseContext;
+using HeroMed_API.Repositories.Employee;
+using HeroMed_API.Repositories.Job;
+using HeroMed_API.Repositories.Section;
+using HeroMed_API.Repositories.User;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<HeroMedContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
+
+#region EntitiesServices
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+#endregion
 
 var app = builder.Build();
 

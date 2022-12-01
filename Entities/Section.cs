@@ -17,6 +17,7 @@ namespace HeroMed_API.Entities
         [Required(ErrorMessage = "Maximum number of emloyees is a required field!"), Range(1, int.MaxValue)]
         public int MaximumEmployeesNo { get; set; }
 
-        public ICollection<Employee> Sections { get; set; } = new List<Employee>();
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        public ICollection<Salon> Salon { get; set; } = new List<Salon>();
     }
 }

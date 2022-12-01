@@ -40,7 +40,9 @@ namespace HeroMed_API.Entities
         public char Gender { get; set; }
         [Required(ErrorMessage = "Salary is a required field!")]
         public Decimal Salary { get; set; }
-
+        
+        [Required(ErrorMessage = "Salary currency is a required field!")]
+        public string SalaryCurrency { get; set; }
 
         [Required(ErrorMessage = "Job is a required field!"), ForeignKey("JobId")]
         public Job Job { get; set; }
