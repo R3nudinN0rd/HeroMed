@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HeroMed_API.Migrations
 {
     [DbContext(typeof(HeroMedContext))]
-    [Migration("20221201212702_ThirdTest")]
-    partial class ThirdTest
+    [Migration("20221201223056_secondTest")]
+    partial class secondTest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -156,6 +156,26 @@ namespace HeroMed_API.Migrations
                             SalaryCurrency = "RON",
                             SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
                             SeniorityYears = 4
+                        },
+                        new
+                        {
+                            Id = new Guid("0b273992-95bd-4baf-b298-92355f67b600"),
+                            Address = " ",
+                            Birthdate = new DateTimeOffset(new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            DocumentsPath = "X://ToCompute",
+                            Email = "remusene69@gmail.com",
+                            EmploymentDate = new DateTimeOffset(new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            FirstName = "admin",
+                            Gender = " ",
+                            JobId = new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f3"),
+                            LastName = "admin",
+                            Nationality = " ",
+                            PhoneNumber = "+40751862506",
+                            PlaceOfBirth = " ",
+                            Salary = 0m,
+                            SalaryCurrency = "RON",
+                            SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
+                            SeniorityYears = 10
                         });
                 });
 
@@ -372,7 +392,7 @@ namespace HeroMed_API.Migrations
                         new
                         {
                             PatientId = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
-                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b622")
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620")
                         },
                         new
                         {
@@ -382,7 +402,7 @@ namespace HeroMed_API.Migrations
                         new
                         {
                             PatientId = new Guid("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
-                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620")
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b622")
                         },
                         new
                         {
@@ -539,8 +559,8 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9246"),
                             Admin = true,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 23, 27, 1, 405, DateTimeKind.Unspecified).AddTicks(4541), new TimeSpan(0, 2, 0, 0, 0)),
-                            EmployeeId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9954), new TimeSpan(0, 2, 0, 0, 0)),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b600"),
                             Password = "admin",
                             Username = "admin"
                         },
@@ -548,7 +568,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9247"),
                             Admin = false,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 23, 27, 1, 405, DateTimeKind.Unspecified).AddTicks(4555), new TimeSpan(0, 2, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9968), new TimeSpan(0, 2, 0, 0, 0)),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620"),
                             Password = "OParola",
                             Username = "UnUSername"
@@ -557,7 +577,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9248"),
                             Admin = false,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 1, 23, 27, 1, 405, DateTimeKind.Unspecified).AddTicks(4559), new TimeSpan(0, 2, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9973), new TimeSpan(0, 2, 0, 0, 0)),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621"),
                             Password = "AltaParola",
                             Username = "AltUSername"
@@ -596,16 +616,16 @@ namespace HeroMed_API.Migrations
 
             modelBuilder.Entity("HeroMed_API.Entities.RelationsEntity.PatientEmployee", b =>
                 {
-                    b.HasOne("HeroMed_API.Entities.Patient", "Patient")
-                        .WithMany("PatientEmployees")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HeroMed_API.Entities.Employee", "Employee")
                         .WithMany("EmployeePatients")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
+                    b.HasOne("HeroMed_API.Entities.Patient", "Patient")
+                        .WithMany("PatientEmployees")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
                     b.Navigation("Employee");

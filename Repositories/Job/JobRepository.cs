@@ -13,6 +13,19 @@ namespace HeroMed_API.Repositories.Job
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public void AddJob(Entities.Job job)
+        {
+            try
+            {
+                _context.Jobs.Add(job);
+                _context.SaveChanges();
+            }
+            catch (ArgumentNullException)
+            {
+                throw new ArgumentNullException(nameof(job));
+            }
+        }
+
         public async Task<IEnumerable<Entities.Job>> GetAllJobsAsync()
         {
             return await _context.Jobs.ToListAsync();

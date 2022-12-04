@@ -165,6 +165,26 @@ namespace HeroMed_API.DatabaseContext
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
                         SeniorityYears = 4,
                         DocumentsPath = "X://ToCompute"
+                    },
+                    new Employee()
+                    {
+                        Id = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b600"),
+                        FirstName = "admin",
+                        LastName = "admin",
+                        Birthdate = new DateTimeOffset(new DateTime(day: 1, month: 1, year:2000)),
+                        EmploymentDate = new DateTimeOffset(new DateTime(day: 1, month: 1, year: 2000)),
+                        PlaceOfBirth = " ",
+                        Nationality = " ",
+                        Address = " ",
+                        PhoneNumber = "+40751862506",
+                        Email = "remusene69@gmail.com",
+                        Gender = ' ',
+                        Salary = 0,
+                        SalaryCurrency = "RON",
+                        JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f3"),
+                        SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
+                        SeniorityYears = 10,
+                        DocumentsPath = "X://ToCompute"
                     }
                 );
             #endregion
@@ -176,7 +196,8 @@ namespace HeroMed_API.DatabaseContext
                         Username = "admin",
                         Password = "admin",
                         CreatedDate = DateTimeOffset.Now,
-                        Admin = true
+                        Admin = true,
+                        EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b600")
                     },
                     new User()
                     {
@@ -285,43 +306,45 @@ namespace HeroMed_API.DatabaseContext
             modelBuilder.Entity<PatientEmployee>()
                 .HasOne(pe => pe.Patient)
                 .WithMany(e => e.PatientEmployees)
-                .HasForeignKey(pe => pe.EmployeeId);
+                .HasForeignKey(pe => pe.PatientId)
+                .OnDelete(DeleteBehavior.ClientNoAction);
 
             modelBuilder.Entity<PatientEmployee>()
                 .HasOne(pe => pe.Employee)
                 .WithMany(p => p.EmployeePatients)
-                .HasForeignKey(pe => pe.PatientId);
+                .HasForeignKey(pe => pe.EmployeeId)
+                .OnDelete(DeleteBehavior.ClientNoAction);
 
             modelBuilder.Entity<PatientEmployee>().HasData(
                 new PatientEmployee()
                 {
-                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
-                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b622")
+                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b620"),
+                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08742")
                 },
                 new PatientEmployee()
                 {
-                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
-                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b621")
+                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b621"),
+                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08742")
                 },
                 new PatientEmployee()
                 {
-                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
-                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b620")
+                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b622"),
+                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08742")
                 },
                 new PatientEmployee()
                 {
-                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08743"),
-                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b621")
+                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b621"),
+                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08743")
                 },
                 new PatientEmployee()
                 {
-                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08743"),
-                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b620")
+                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b620"),
+                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08743")
                 },
                 new PatientEmployee()
                 {
-                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08744"),
-                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b620")
+                    EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b620"),
+                    PatientId = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08744")
                 }
                 );
             #endregion

@@ -41,7 +41,8 @@ namespace HeroMed_API.Repositories.Employee
 
         public async Task<IEnumerable<Entities.Employee>> GetAllEmployeesAsync()
         {
-            return await _context.Employees.ToListAsync();
+            var entity = await _context.Employees.ToListAsync();
+            return entity;
         }
 
         public async Task<Entities.Employee> GetEmployeeByEmailAsync(string email)
