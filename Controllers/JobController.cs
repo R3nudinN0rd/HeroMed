@@ -21,18 +21,18 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Entities.Job>> GetAllJobs()
+        public ActionResult<IEnumerable<Models.JobDTO>> GetAllJobs()
         {
             var jobsFromRepo = _jobRepository.GetAllJobsAsync().GetAwaiter().GetResult();
             if (!_validator.ValidateResult(jobsFromRepo))
             {
                 return NotFound();
             }
-            return Ok(jobsFromRepo);
+            return Ok(_mapper.Map<IEnumerable<Job>>(jobsFromRepo));
         }
 
         [HttpGet("/{jobId}")]
-        public ActionResult<Entities.Job> GetJobById(Guid jobId)
+        public ActionResult<Models.JobDTO> GetJobById(Guid jobId)
         {
             if (!_validator.ValidateGuid(jobId))
             {
@@ -45,7 +45,7 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(jobFromRepo);
+            return Ok(_mapper.Map<Job>(jobFromRepo));
         }
 
         [HttpPost]

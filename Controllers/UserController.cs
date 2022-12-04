@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HeroMed_API.Repositories.User;
+using HeroMed_API.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
@@ -10,45 +11,63 @@ namespace HeroMed_API.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly ControllersInputsValidators _validator;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository, IMapper mapper, ControllersInputsValidators validator)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
         [HttpGet,HttpHead]
-        public ActionResult<IEnumerable<Entities.User>> GertAllUsers()
+        public ActionResult<IEnumerable<Models.UserDTO>> GetAllUsers()
         {
-            var usersFromRepo = _userRepository.GetAllUsersAsync();
-            return Ok(usersFromRepo.GetAwaiter().GetResult());
+            var usersFromRepo = _userRepository.GetAllUsersAsync().GetAwaiter().GetResult();
+            if (!_validator.ValidateResult(usersFromRepo))
+            {
+                return NotFound(); ;
+            }
+
+            return Ok(_mapper.Map<IEnumerable<Entities.User>>(usersFromRepo));
         }
 
         [HttpGet("/admins")]
-        public ActionResult<IEnumerable<Entities.User>> GetAdmins()
+        public ActionResult<IEnumerable<Models.UserDTO>> GetAdmins()
         {
-            var usersFromRepo = _userRepository.GetAdminsAsync();
-            return Ok(usersFromRepo.GetAwaiter().GetResult());
+            var usersFromRepo = _userRepository.GetAdminsAsync().GetAwaiter().GetResult();
+
+            if(!_validator.ValidateResult(usersFromRepo))
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<IEnumerable<Entities.User>>(usersFromRepo));
         }
 
         [HttpGet("/{employeeId}")]
-        public ActionResult<Entities.User> GetUserByEmplId(Guid employeeId)
+        public ActionResult<Models.UserDTO> GetUserByEmplId(Guid employeeId)
         {
-            var userFromRepo = _userRepository.GetUserByEmployeeId(employeeId);
-            if(userFromRepo == null)
+            if (!_validator.ValidateGuid(employeeId))
+            {
+                return BadRequest();
+            }
+
+            var userFromRepo = _userRepository.GetUserByEmployeeId(employeeId).GetAwaiter().GetResult();
+
+            if (!_validator.ValidateResult(userFromRepo))
             {
                 return NotFound();
             }
 
-            return Ok(userFromRepo.GetAwaiter().GetResult());
+            return Ok(_mapper.Map<Entities.User>(userFromRepo));
         }
 
         [HttpPost]
         public ActionResult AddUser(Entities.User user)
         {
-            if(user == null)
+            if(!_validator.ValidateUserToInsert(user))
             {
-                return BadRequest();
+                return UnprocessableEntity();
             }
 
             _userRepository.AddUser(user);

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 
-namespace HeroMed_API.Profiles
+namespace HeroMed_API.Profiles.Employee
 {
-    public class EmployeeProfile:Profile
+    public class EmployeeProfile : Profile
     {
         public EmployeeProfile()
         {

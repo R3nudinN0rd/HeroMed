@@ -7,8 +7,7 @@ namespace HeroMed_API.Validators
         #region CommonValidators
         public bool ValidateGuid(Guid guid)
         {
-            Guid x;
-            if (Guid.TryParse(guid.ToString(), out x) == false)
+            if (Guid.TryParse(guid.ToString(), out _) == false)
             {
                 return false;
             }
@@ -27,10 +26,11 @@ namespace HeroMed_API.Validators
         }
         #endregion
 
-        #region PatientValidators
+        #region EntitiesValidator
+            #region PatientValidators
         public bool ValidateResult(Patient patient)
         {
-            if(patient == null)
+            if (patient == null)
             {
                 return false;
             }
@@ -40,7 +40,7 @@ namespace HeroMed_API.Validators
 
         public bool ValidateResult(IEnumerable<Patient> patients)
         {
-            if(patients.Count() == 0)
+            if (patients.Count() == 0)
             {
                 return false;
             }
@@ -50,13 +50,13 @@ namespace HeroMed_API.Validators
 
         public bool ValidatePatientToInsert(Patient patient)
         {
-            if(patient.Id == Guid.Empty ||
+            if (patient.Id == Guid.Empty ||
                patient.SalonId == Guid.Empty)
             {
                 return false;
             }
 
-            if(patient.FirstName == "" ||
+            if (patient.FirstName == "" ||
                patient.LastName == "" ||
                patient.Address == "" ||
                patient.Email == "" ||
@@ -72,7 +72,7 @@ namespace HeroMed_API.Validators
         }
 
         #endregion
-        #region EmployeeValidators
+            #region EmployeeValidators
         public bool ValidateResult(Employee employee)
         {
             if (employee == null)
@@ -95,21 +95,21 @@ namespace HeroMed_API.Validators
 
         public bool ValidateEmployeeToInsert(Employee employee)
         {
-            if(employee.Id == Guid.Empty ||
+            if (employee.Id == Guid.Empty ||
                employee.JobId == Guid.Empty ||
                employee.SectionId == Guid.Empty)
             {
                 return false;
             }
 
-            if(employee.FirstName == "" ||
+            if (employee.FirstName == "" ||
                employee.LastName == "" ||
-               employee.PlaceOfBirth =="" ||
+               employee.PlaceOfBirth == "" ||
                employee.Address == "" ||
                employee.Nationality == "" ||
                employee.PhoneNumber == "" ||
                employee.Email == "" ||
-               (employee.Gender != 'M' && employee.Gender!='F') ||
+               (employee.Gender != 'M' && employee.Gender != 'F') ||
                employee.Salary == 0 ||
                employee.SalaryCurrency == "")
             {
@@ -119,7 +119,7 @@ namespace HeroMed_API.Validators
             return true;
         }
         #endregion
-        #region JobValidators
+            #region JobValidators
         public bool ValidateResult(Job job)
         {
             if (job == null)
@@ -142,17 +142,18 @@ namespace HeroMed_API.Validators
 
         public bool ValidateJobToInsert(Job job)
         {
-            if(job.Id == Guid.Empty)
+            if (job.Id == Guid.Empty)
             {
                 return false;
             }
-            if(job.Title == "" || 
+
+            if (job.Title == "" ||
                job.Description == "" ||
                job.MinBruteSalary == 0 ||
                job.MaxBruteSalary == 0 ||
                job.Currency == "" ||
                job.MinISCEDLevel == 0 ||
-               job.WorkHoursPerMonth == 0||
+               job.WorkHoursPerMonth == 0 ||
                job.AnnualPaidLeave == 0)
             {
                 return false;
@@ -161,5 +162,122 @@ namespace HeroMed_API.Validators
             return true;
         }
         #endregion
+            #region SectionValidators
+        public bool ValidateResult(Section section)
+        {
+            if (section == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ValidateResult(IEnumerable<Section> sections)
+        {
+            if (sections.Count() == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ValidateSectionToInsert(Section section)
+        {
+            if (section.Id == Guid.Empty)
+            {
+                return false;
+            }
+
+            if (section.Title == "" ||
+                section.Description == "" ||
+                section.MaximumEmployeesNo == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+            #region UserValidators
+        public bool ValidateResult(IEnumerable<User> users)
+        {
+            if(users.Count() == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ValidateResult(User user)
+        {
+            if(user == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ValidateUserToInsert(User user)
+        {
+            if(user.Id == Guid.Empty ||
+               user.EmployeeId == Guid.Empty)
+            {
+                return false;
+            }
+
+
+
+            if(user.Username == "" ||
+               user.Password == "" ||
+               !bool.TryParse(user.Admin.ToString(), out _))
+            {
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+            #region SalonValidators
+        public bool ValidateResult(IEnumerable<Entities.Salon> salons)
+        {
+            if(salons.Count() == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ValidateResult(Entities.Salon salon)
+        {
+            if(salon == null)
+            {
+                return false;
+            }
+            return true;
+        } 
+
+        public bool ValidateSalonToInsert(Entities.Salon salon)
+        {
+            if(salon.Id == Guid.Empty ||
+               salon.SectionId == Guid.Empty)
+            {
+                return false;
+            }
+            if(!int.TryParse(salon.Floor.ToString(), out _) ||
+               !int.TryParse(salon.Beds.ToString(), out _) ||
+               !bool.TryParse(salon.Available.ToString(), out _))
+
+            {
+                return false;
+            }
+
+            return true;
+        }
+            #endregion
+
+        #endregion
+
     }
 }

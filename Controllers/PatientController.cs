@@ -13,83 +13,84 @@ namespace HeroMed_API.Controllers
     {
         private readonly IPatientRepository _patientRepository;
         private readonly IMapper _mapper;
-        private readonly ControllersInputsValidators validator;
-        public PatientController(IMapper mapper, IPatientRepository patientRepository)
+        private readonly ControllersInputsValidators _validator;
+        public PatientController(IMapper mapper, IPatientRepository patientRepository, ControllersInputsValidators validator)
         {
             _patientRepository = patientRepository ?? throw new ArgumentNullException(nameof(patientRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Entities.Patient>> GetAllPatients()
+        public ActionResult<IEnumerable<Models.PatientDTO>> GetAllPatients()
         {
-            var patientsFromRepo = _patientRepository.GetAllPatientsAsync();
-            if(patientsFromRepo == null)
+            var patientsFromRepo = _patientRepository.GetAllPatientsAsync().GetAwaiter().GetResult();
+            if(!_validator.ValidateResult(patientsFromRepo))
             {
                 return NotFound();
             }
 
-            return Ok(patientsFromRepo.GetAwaiter().GetResult());
+            return Ok(_mapper.Map<IEnumerable<Patient>>(patientsFromRepo));
         }
 
         [HttpGet("/id/{id}")]
-        public ActionResult<Patient> GetPatientById(Guid id)
+        public ActionResult<Models.PatientDTO> GetPatientById(Guid id)
         {
-            if (!validator.ValidateGuid(id))
+            if (!_validator.ValidateGuid(id))
             {
                 return UnprocessableEntity();
             }
 
             var patientFromRepo = _patientRepository.GetPatientByIdAsync(id).GetAwaiter().GetResult();
-            if (!validator.ValidateResult(patientFromRepo))
+            if (!_validator.ValidateResult(patientFromRepo))
             {
                 return NotFound();
             }
 
-            return Ok(patientFromRepo);
+            return Ok(_mapper.Map<Patient>(patientFromRepo));
         }
 
         [HttpGet("/email/{email}")]
-        public ActionResult<Patient> GetPatientByEmail(string email)
+        public ActionResult<Models.PatientDTO> GetPatientByEmail(string email)
         {
-            if (!validator.ValidateString(email))
+            if (!_validator.ValidateString(email))
             {
                 return UnprocessableEntity();
             }
 
             var patientFromRepo = _patientRepository.GetPatientByPatientEmailAsync(email).GetAwaiter().GetResult();
 
-            if (!validator.ValidateResult(patientFromRepo))
+            if (!_validator.ValidateResult(patientFromRepo))
             {
                 return NotFound();
             }
 
-            return Ok(patientFromRepo);
+            return Ok(_mapper.Map<Patient>(patientFromRepo));
 
         }
 
         [HttpGet("/salon/{salonId}")]
-        public ActionResult<IEnumerable<Patient>> GetPatientsBySalon(Guid salonId)
+        public ActionResult<IEnumerable<Models.PatientDTO>> GetPatientsBySalon(Guid salonId)
         {
-            if (!validator.ValidateGuid(salonId))
+            if (!_validator.ValidateGuid(salonId))
             {
                 return BadRequest();
             }
 
             var patientFromRepo = _patientRepository.GetPatientBySalonAsync(salonId).GetAwaiter().GetResult();
 
-            if (!validator.ValidateResult(patientFromRepo))
+            if (!_validator.ValidateResult(patientFromRepo))
             {
                 return NotFound();
             }
 
-            return Ok();
+            return Ok(_mapper.Map<IEnumerable<Patient>>(patientFromRepo));
         }
 
         [HttpPost]
         public ActionResult AddPatient(Patient patient)
         {
-            if (!validator.ValidatePatientToInsert(patient))
+            if (!_validator.ValidatePatientToInsert(patient))
             {
                 return UnprocessableEntity();
             }
@@ -103,7 +104,7 @@ namespace HeroMed_API.Controllers
         [HttpDelete("/{id}")]
         public ActionResult DeletePatient(Guid id)
         {
-            if (!validator.ValidateGuid(id))
+            if (!_validator.ValidateGuid(id))
             {
                 return BadRequest();
             }
