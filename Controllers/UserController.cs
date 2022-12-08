@@ -44,7 +44,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Entities.User>>(usersFromRepo));
         }
 
-        [HttpGet("/{employeeId}")]
+        [HttpGet("/empl/{employeeId}")]
         public ActionResult<Models.UserDTO> GetUserByEmplId(Guid employeeId)
         {
             if (!_validator.ValidateGuid(employeeId))

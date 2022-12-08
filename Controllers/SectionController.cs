@@ -34,7 +34,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Section>>(sectionsFromRepo));
         }
 
-        [HttpGet("/{sectionId}")]
+        [HttpGet("/section/{sectionId}")]
         public ActionResult<Section> GetSectionById(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))

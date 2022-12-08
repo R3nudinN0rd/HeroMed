@@ -85,9 +85,9 @@ namespace HeroMed_API.Repositories.PatientEmployee
             return employees;
         }
 
-        public async Task<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetPatientEmployeeRelationsAsync(Guid employeeId)
+        public async Task<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetPatientEmployeeRelationsAsync()
         {
-            return await _context.PatientEmployee.Where(r => r.EmployeeId == employeeId).ToListAsync();
+            return await _context.PatientEmployee.ToListAsync();
         }
 
         public async Task<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetPatientEmployeesRelationsAsync(Guid patientId)
