@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using HeroMed_API.Repositories.User;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("api/users")]
+    [EnableCors("AllowOrigins")]
     public class UserController:ControllerBase
     {
         private readonly IUserRepository _userRepository;
@@ -44,7 +46,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Entities.User>>(usersFromRepo));
         }
 
-        [HttpGet("/{employeeId}")]
+        [HttpGet("/employee/{employeeId}")]
         public ActionResult<Models.UserDTO> GetUserByEmplId(Guid employeeId)
         {
             if (!_validator.ValidateGuid(employeeId))

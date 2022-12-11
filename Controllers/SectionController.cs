@@ -2,6 +2,7 @@
 using HeroMed_API.Entities;
 using HeroMed_API.Repositories.Section;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 
@@ -9,6 +10,7 @@ namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("api/sections")]
+    [EnableCors("AllowOrigins")]
     public class SectionController:ControllerBase
     {
         private readonly ISectionRepository _sectionRepository;
@@ -34,7 +36,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Section>>(sectionsFromRepo));
         }
 
-        [HttpGet("/{sectionId}")]
+        [HttpGet("/id/{sectionId}")]
         public ActionResult<Section> GetSectionById(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))

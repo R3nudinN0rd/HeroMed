@@ -2,12 +2,14 @@
 using HeroMed_API.DatabaseContext;
 using HeroMed_API.Repositories.Salon;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("/api/salon")]
+    [EnableCors("AllowOrigins")]
     public class SalonController:ControllerBase
     {
         private readonly ISalonRepository _salonRepository;
@@ -33,7 +35,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<Entities.Salon>(salonsFromRepo));
         }
 
-        [HttpGet("/{sectionId}")]
+        [HttpGet("/section/{sectionId}")]
         public ActionResult<IEnumerable<Models.SalonDTO>> GetSalonsBySectionId(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))

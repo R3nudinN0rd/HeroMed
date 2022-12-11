@@ -2,12 +2,14 @@
 using HeroMed_API.Entities;
 using HeroMed_API.Repositories.Job;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("/api/jobs")]
+    [EnableCors("AllowOrigins")]
     public class JobController:ControllerBase
     {
         private readonly IJobRepository _jobRepository;
@@ -31,7 +33,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Job>>(jobsFromRepo));
         }
 
-        [HttpGet("/{jobId}")]
+        [HttpGet("/id/{jobId}")]
         public ActionResult<Models.JobDTO> GetJobById(Guid jobId)
         {
             if (!_validator.ValidateGuid(jobId))

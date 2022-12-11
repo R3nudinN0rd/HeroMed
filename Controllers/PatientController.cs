@@ -3,12 +3,14 @@ using HeroMed_API.DatabaseContext;
 using HeroMed_API.Entities;
 using HeroMed_API.Repositories.Patient;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("/api/patient")]
+    [EnableCors("AllowOrigins")]
     public class PatientController : ControllerBase
     {
         private readonly IPatientRepository _patientRepository;

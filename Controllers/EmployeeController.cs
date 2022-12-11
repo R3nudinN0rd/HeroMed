@@ -2,12 +2,14 @@
 using HeroMed_API.Entities;
 using HeroMed_API.Repositories.Employee;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("api/employees")]
+    [EnableCors("AllowOrigins")]
     public class EmployeeController:ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
