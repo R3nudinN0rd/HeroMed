@@ -35,7 +35,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<Entities.Salon>(salonsFromRepo));
         }
 
-        [HttpGet("/section/{sectionId}")]
+        [HttpGet("/salon/{sectionId}")]
         public ActionResult<IEnumerable<Models.SalonDTO>> GetSalonsBySectionId(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))

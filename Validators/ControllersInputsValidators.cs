@@ -1,4 +1,5 @@
 ﻿using HeroMed_API.Entities;
+using Microsoft.AspNetCore.Connections.Features;
 
 namespace HeroMed_API.Validators
 {
@@ -275,8 +276,39 @@ namespace HeroMed_API.Validators
 
             return true;
         }
-            #endregion
+        #endregion
+            #region PatientEmployeeValidators
+        public bool ValidateResult(Entities.RelationsEntity.PatientEmployee relation)
+        {
+            if(relation == null)
+            {
+                return false;
+            }
+            return true;
+        }
 
+        public bool ValidateResult(IEnumerable<Entities.RelationsEntity.PatientEmployee> relations)
+        {
+            if(relations.Count() == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ValidateRelationToInsert(Entities.RelationsEntity.PatientEmployee relation)
+        {
+            if(!ValidateGuid(relation.PatientId) ||
+               !ValidateGuid(relation.EmployeeId) ||
+               relation.PatientId == Guid.Empty || 
+               relation.EmployeeId == Guid.Empty)
+            {
+                return false;
+            }
+
+            return true;
+        }
+            #endregion
         #endregion
 
     }
