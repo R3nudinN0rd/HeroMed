@@ -6,7 +6,9 @@ namespace HeroMed_API.Profiles.Job
     {
         public JobProfile()
         {
-            CreateMap<Entities.Job, Models.JobDTO>();
+            CreateMap<Entities.Job, Models.JobDTO>().ReverseMap();
+            CreateMap<Entities.Job, Models.InsertDTOs.InsertJobDTO>().ReverseMap();
+            CreateMap<Entities.Job, Models.UpdateDTOs.UpdateJobDTO>().ReverseMap();
         }
     }
 }

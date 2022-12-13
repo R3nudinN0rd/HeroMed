@@ -10,7 +10,7 @@ namespace HeroMed_API.Repositories.Employee
         void AddEmployee(Entities.Employee employee);
         void DeleteEmployee(Entities.Employee employee);
         void UpdateEmployee(Entities.Employee employee);
-        
+        bool EmployeeExists(Guid employeeID);
         
     }
 }

@@ -17,10 +17,10 @@ namespace HeroMed_API.Entities
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Birthdate is a required field!")]
-        public DateTimeOffset Birthdate { get; set; }
+        public DateTime Birthdate { get; set; }
 
         [Required(ErrorMessage = "Employment date is a required field!")]
-        public DateTimeOffset EmploymentDate { get; set; }
+        public DateTime EmploymentDate { get; set; }
 
         [Required(ErrorMessage = "Place of birth is a required field!")]
         public string PlaceOfBirth { get; set; }
@@ -39,18 +39,14 @@ namespace HeroMed_API.Entities
 
         [Required(ErrorMessage = "Gender is a required field!")]
         public char Gender { get; set; }
-        [Required(ErrorMessage = "Salary is a required field!")]
-        public Decimal Salary { get; set; }
+        public Decimal? Salary { get; set; }
         
-        [Required(ErrorMessage = "Salary currency is a required field!")]
-        public string SalaryCurrency { get; set; }
+        public string? SalaryCurrency { get; set; }
 
-        [Required(ErrorMessage = "Job is a required field!"), ForeignKey("JobId")]
         public Job Job { get; set; }
 
         public Guid JobId { get; set; } 
         
-        [Required(ErrorMessage = "Section is a required field!"), ForeignKey("SectionId")]
         public Section Section { get; set; }
 
         public Guid SectionId { get; set; }
@@ -58,7 +54,7 @@ namespace HeroMed_API.Entities
         [Required(ErrorMessage = "Years of seniority is a required field!")]
         public int SeniorityYears { get; set; }
 
-        public string DocumentsPath { get; set; }
+        public string? DocumentsPath { get; set; }
 
         public User User { get; set; }
         public ICollection<PatientEmployee> EmployeePatients { get; set; }

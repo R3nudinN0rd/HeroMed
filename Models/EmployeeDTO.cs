@@ -3,9 +3,12 @@
     public class EmployeeDTO
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public DateOnly Birthdate { get; set; }
-        public DateOnly EmployementDate { get; set; }
+        public Guid JobId { get; set; }
+        public Guid SectionId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime Birthdate { get; set; }
+        public DateTime EmployementDate { get; set; }
         public string PlaceOfBirth { get; set; }
         public string Nationality { get; set; }
         public string Address { get; set; }

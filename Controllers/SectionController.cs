@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using HeroMed_API.Entities;
+using HeroMed_API.Models;
+using HeroMed_API.Models.UpdateDTOs;
 using HeroMed_API.Repositories.Section;
 using HeroMed_API.Validators;
 using Microsoft.AspNetCore.Cors;
@@ -25,7 +27,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Models.SectionDTO>> GetSections()
+        public ActionResult<IEnumerable<Models.SectionDTO>> GetAllSections()
         {
             var sectionsFromRepo = _sectionRepository.GetAllSectionsAsync().GetAwaiter().GetResult();
             if (!_validator.ValidateResult(sectionsFromRepo))
@@ -33,11 +35,11 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<Section>>(sectionsFromRepo));
+            return Ok(_mapper.Map<IEnumerable<SectionDTO>>(sectionsFromRepo));
         }
 
         [HttpGet("/section/{sectionId}")]
-        public ActionResult<Section> GetSectionById(Guid sectionId)
+        public ActionResult<SectionDTO> GetSectionById(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))
             {
@@ -51,15 +53,28 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Section>(sectionFromRepo));
+            return Ok(_mapper.Map<SectionDTO>(sectionFromRepo));
 
         }
 
-        [HttpPut]
-        public ActionResult UpdateSection(Entities.Section section)
+        [HttpPut("{sectionId}")]
+        public ActionResult UpdateSection(Guid sectionId, UpdateSectionDTO sectionDTO)
         {
-            _sectionRepository.UpdateSection(section);
-            return Ok();
+            if (!_validator.ValidateGuid(sectionId))
+            {
+                return BadRequest();
+            }
+
+            if (!_sectionRepository.SectionExists(sectionId))
+            {
+                return NotFound();
+            }
+
+            var sectionFromRepo = _sectionRepository.GetSectionByIdAsync(sectionId).GetAwaiter().GetResult();
+
+            _mapper.Map(sectionDTO, sectionFromRepo);
+            _sectionRepository.UpdateSection(sectionFromRepo);
+            return NoContent();
         }
     }
 }

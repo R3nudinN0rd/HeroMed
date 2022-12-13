@@ -10,6 +10,16 @@ namespace HeroMed_API.Repositories.Section
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+
+        public bool SectionExists(Guid sectionId)
+        {
+            if(_context.Sections.FirstOrDefault(section => section.Id == sectionId) == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
         public async Task<IEnumerable<Entities.Section>> GetAllSectionsAsync()
         {
             return await _context.Sections.ToListAsync();

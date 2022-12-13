@@ -5,5 +5,6 @@
         Task<IEnumerable<Entities.Section>> GetAllSectionsAsync();
         Task<Entities.Section> GetSectionByIdAsync(Guid id);
         void UpdateSection(Entities.Section section);
+        bool SectionExists(Guid sectionId);
     }
 }

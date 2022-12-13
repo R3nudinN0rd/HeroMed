@@ -33,6 +33,6 @@ namespace HeroMed_API.Entities
         [Required(ErrorMessage = "Paid leave per year is a required field!")]
         public int AnnualPaidLeave { get; set; }
 
-        public ICollection<Employee> Employees { get; set; } = new List<Employee>(); 
+        public ICollection<Employee> Employees { get; set; }
     }
 }

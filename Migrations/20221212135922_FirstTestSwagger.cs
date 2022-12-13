@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HeroMed_API.Migrations
 {
-    public partial class secondTest : Migration
+    public partial class FirstTestSwagger : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,20 +49,20 @@ namespace HeroMed_API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Birthdate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    EmploymentDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmploymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PlaceOfBirth = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nationality = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(1)", nullable: false),
-                    Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SalaryCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SalaryCurrency = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SeniorityYears = table.Column<int>(type: "int", nullable: false),
-                    DocumentsPath = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DocumentsPath = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -202,10 +202,10 @@ namespace HeroMed_API.Migrations
                 columns: new[] { "Id", "Address", "Birthdate", "DocumentsPath", "Email", "EmploymentDate", "FirstName", "Gender", "JobId", "LastName", "Nationality", "PhoneNumber", "PlaceOfBirth", "Salary", "SalaryCurrency", "SectionId", "SeniorityYears" },
                 values: new object[,]
                 {
-                    { new Guid("0b273992-95bd-4baf-b298-92355f67b600"), " ", new DateTimeOffset(new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "X://ToCompute", "remusene69@gmail.com", new DateTimeOffset(new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "admin", " ", new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f3"), "admin", " ", "+40751862506", " ", 0m, "RON", new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"), 10 },
-                    { new Guid("0b273992-95bd-4baf-b298-92355f67b620"), "Arges, Pitesti, Strada Mioarei Nr1", new DateTimeOffset(new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "X://ToCompute", "unemail@gmail.com", new DateTimeOffset(new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)), "Mihai", "M", new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f2"), "Calugar", "Romanian", "+40712345678", "Arges, Pitesti, Strada Mioarei Nr. 1", 7200m, "RON", new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb82"), 4 },
-                    { new Guid("0b273992-95bd-4baf-b298-92355f67b621"), "Arges, Pitesti, Strada Mioarei Nr1", new DateTimeOffset(new DateTime(1968, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "X://ToCompute", "altemail@gmail.com", new DateTimeOffset(new DateTime(2000, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)), "George", "M", new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f2"), "Patrar", "Romanian", "+40723456789", "Bucurest, Sectorul 1, O strada nr 3", 29000m, "RON", new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb83"), 22 },
-                    { new Guid("0b273992-95bd-4baf-b298-92355f67b622"), "Arges, Pitesti, Strada Mioarei Nr1", new DateTimeOffset(new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "X://ToCompute", "unemail@gmail.com", new DateTimeOffset(new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)), "Mihai", "M", new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f3"), "Calugar", "Romanian", "+40712345678", "Arges, Pitesti, Strada Mioarei Nr. 1", 7200m, "RON", new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"), 4 }
+                    { new Guid("0b273992-95bd-4baf-b298-92355f67b600"), " ", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "X://ToCompute", "remusene69@gmail.com", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin", " ", new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f3"), "admin", " ", "+40751862506", " ", 0m, "RON", new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"), 10 },
+                    { new Guid("0b273992-95bd-4baf-b298-92355f67b620"), "Arges, Pitesti, Strada Mioarei Nr1", new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "X://ToCompute", "unemail@gmail.com", new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mihai", "M", new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f2"), "Calugar", "Romanian", "+40712345678", "Arges, Pitesti, Strada Mioarei Nr. 1", 7200m, "RON", new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb82"), 4 },
+                    { new Guid("0b273992-95bd-4baf-b298-92355f67b621"), "Arges, Pitesti, Strada Mioarei Nr1", new DateTime(1968, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "X://ToCompute", "altemail@gmail.com", new DateTime(2000, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "George", "M", new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f2"), "Patrar", "Romanian", "+40723456789", "Bucurest, Sectorul 1, O strada nr 3", 29000m, "RON", new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb83"), 22 },
+                    { new Guid("0b273992-95bd-4baf-b298-92355f67b622"), "Arges, Pitesti, Strada Mioarei Nr1", new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "X://ToCompute", "unemail@gmail.com", new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mihai", "M", new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f3"), "Calugar", "Romanian", "+40712345678", "Arges, Pitesti, Strada Mioarei Nr. 1", 7200m, "RON", new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"), 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -233,9 +233,9 @@ namespace HeroMed_API.Migrations
                 columns: new[] { "Id", "Admin", "CreatedDate", "EmployeeId", "Password", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9246"), true, new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9954), new TimeSpan(0, 2, 0, 0, 0)), new Guid("0b273992-95bd-4baf-b298-92355f67b600"), "admin", "admin" },
-                    { new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9247"), false, new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9968), new TimeSpan(0, 2, 0, 0, 0)), new Guid("0b273992-95bd-4baf-b298-92355f67b620"), "OParola", "UnUSername" },
-                    { new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9248"), false, new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9973), new TimeSpan(0, 2, 0, 0, 0)), new Guid("0b273992-95bd-4baf-b298-92355f67b621"), "AltaParola", "AltUSername" }
+                    { new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9246"), true, new DateTimeOffset(new DateTime(2022, 12, 12, 15, 59, 21, 936, DateTimeKind.Unspecified).AddTicks(9075), new TimeSpan(0, 2, 0, 0, 0)), new Guid("0b273992-95bd-4baf-b298-92355f67b600"), "admin", "admin" },
+                    { new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9247"), false, new DateTimeOffset(new DateTime(2022, 12, 12, 15, 59, 21, 936, DateTimeKind.Unspecified).AddTicks(9153), new TimeSpan(0, 2, 0, 0, 0)), new Guid("0b273992-95bd-4baf-b298-92355f67b620"), "OParola", "UnUSername" },
+                    { new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9248"), false, new DateTimeOffset(new DateTime(2022, 12, 12, 15, 59, 21, 936, DateTimeKind.Unspecified).AddTicks(9156), new TimeSpan(0, 2, 0, 0, 0)), new Guid("0b273992-95bd-4baf-b298-92355f67b621"), "AltaParola", "AltUSername" }
                 });
 
             migrationBuilder.InsertData(

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HeroMed_API.DatabaseContext;
+using HeroMed_API.Models.UpdateDTOs;
 using HeroMed_API.Repositories.Salon;
 using HeroMed_API.Validators;
 using Microsoft.AspNetCore.Cors;
@@ -32,7 +33,7 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Entities.Salon>(salonsFromRepo));
+            return Ok(_mapper.Map<IEnumerable<Models.SalonDTO>>(salonsFromRepo));
         }
 
         [HttpGet("/salon/{sectionId}")]
@@ -50,7 +51,7 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Entities.Salon>(salonsFromRepo));
+            return Ok(_mapper.Map<IEnumerable<Models.SalonDTO>>(salonsFromRepo));
         }
 
         [HttpGet("/salon/available")]
@@ -62,14 +63,14 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Entities.Salon>(salonsFromRepo));
+            return Ok(_mapper.Map<IEnumerable<Models.SalonDTO>>(salonsFromRepo));
         }
 
 
         [HttpGet("id/{id}")]
         public ActionResult<Models.SalonDTO> GetSalonById(Guid id)
         {
-            if (_validator.ValidateGuid(id))
+            if (!_validator.ValidateGuid(id))
             {
                 return BadRequest();
             }
@@ -81,14 +82,27 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Entities.Salon>(salonFromRepo));
+            return Ok(_mapper.Map<Models.SalonDTO>(salonFromRepo));
         }
 
-        [HttpPut]
-        public ActionResult UpdateSalon(Entities.Salon salon)
+        [HttpPut("{salonId}")]
+        public ActionResult UpdateSalon(Guid salonId, UpdateSalonDTO salonDTO)
         {
-            _salonRepository.UpdateSalon(salon);
-            return Ok();
+            if (!_validator.ValidateGuid(salonId))
+            {
+                return BadRequest();
+            }
+
+            if (!_salonRepository.SalonExists(salonId))
+            {
+                return NotFound();
+            }
+
+            var salonFromRepo = _salonRepository.GetSalonByIdAsync(salonId).GetAwaiter().GetResult();
+
+            _mapper.Map(salonDTO, salonFromRepo);
+            _salonRepository.UpdateSalon(salonFromRepo);
+            return NoContent();
         }
     }
 }

@@ -12,6 +12,16 @@ namespace HeroMed_API.Repositories.User
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public bool UserExists(Guid userID)
+        {
+            if(_context.Users.FirstOrDefault(user => user.Id == userID) == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public void AddUser(Entities.User user)
         {
             try
@@ -43,9 +53,22 @@ namespace HeroMed_API.Repositories.User
             }
         }
 
-        public Task<IEnumerable<Entities.User>> GetAdminsAsync()
+        public void DeleteUserById(Entities.User user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<Entities.User>> GetAdminsAsync()
+        {
+            return await _context.Users.Where(user => user.Admin == true).ToListAsync();
         }
 
         public async Task<IEnumerable<Entities.User>> GetAllUsersAsync()
@@ -61,6 +84,11 @@ namespace HeroMed_API.Repositories.User
         public async Task<Entities.User> GetUserByUsernameAsync(string username)
         {
             return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Username == username);
+        }
+
+        public async Task<Entities.User> GetUserByIdAsync(Guid userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Id == userId);
         }
 
         public void UpdateUser(Entities.User user)

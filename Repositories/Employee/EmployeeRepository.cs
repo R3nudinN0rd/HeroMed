@@ -12,6 +12,13 @@ namespace HeroMed_API.Repositories.Employee
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+        public bool EmployeeExists(Guid employeeId)
+        {
+            if (_context.Employees.FirstOrDefault(e => e.Id == employeeId) != null)
+                return true;
+
+            return false;
+        }
 
         public void AddEmployee(Entities.Employee employee)
         {
@@ -20,9 +27,9 @@ namespace HeroMed_API.Repositories.Employee
                 _context.Employees.Add(employee);
                 _context.SaveChanges();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new ArgumentNullException(nameof(employee));
+                throw ex;
             }
         }
 
@@ -35,7 +42,7 @@ namespace HeroMed_API.Repositories.Employee
             }
             catch(Exception) 
             {
-                throw new ArgumentNullException(nameof(employee));
+                throw new Exception(nameof(employee));
             }
         }
 
@@ -62,10 +69,11 @@ namespace HeroMed_API.Repositories.Employee
                 _context.Employees.Update(employee);
                 _context.SaveChanges();
             }
-            catch(ArgumentNullException)
+            catch(Exception)
             {
-                throw new ArgumentNullException(nameof(employee));
+                throw new Exception(nameof(employee));
             }
         }
+
     }
 }

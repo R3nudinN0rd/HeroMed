@@ -1,4 +1,6 @@
 ﻿using HeroMed_API.Entities;
+using HeroMed_API.Models;
+using HeroMed_API.Models.InsertDTOs;
 using Microsoft.AspNetCore.Connections.Features;
 
 namespace HeroMed_API.Validators
@@ -49,10 +51,9 @@ namespace HeroMed_API.Validators
             return true;
         }
 
-        public bool ValidatePatientToInsert(Patient patient)
+        public bool ValidatePatientToInsert(InsertPatientDTO patient)
         {
-            if (patient.Id == Guid.Empty ||
-               patient.SalonId == Guid.Empty)
+            if (patient.SalonId == Guid.Empty)
             {
                 return false;
             }
@@ -94,10 +95,9 @@ namespace HeroMed_API.Validators
             return true;
         }
 
-        public bool ValidateEmployeeToInsert(Employee employee)
+        public bool ValidateEmployeeToInsert(InsertEmployeeDTO employee)
         {
-            if (employee.Id == Guid.Empty ||
-               employee.JobId == Guid.Empty ||
+            if (employee.JobId == Guid.Empty ||
                employee.SectionId == Guid.Empty)
             {
                 return false;
@@ -110,9 +110,7 @@ namespace HeroMed_API.Validators
                employee.Nationality == "" ||
                employee.PhoneNumber == "" ||
                employee.Email == "" ||
-               (employee.Gender != 'M' && employee.Gender != 'F') ||
-               employee.Salary == 0 ||
-               employee.SalaryCurrency == "")
+               (employee.Gender != 'M' && employee.Gender != 'F'))
             {
                 return false;
             }
@@ -141,13 +139,8 @@ namespace HeroMed_API.Validators
             return true;
         }
 
-        public bool ValidateJobToInsert(Job job)
+        public bool ValidateJobToInsert(InsertJobDTO job)
         {
-            if (job.Id == Guid.Empty)
-            {
-                return false;
-            }
-
             if (job.Title == "" ||
                job.Description == "" ||
                job.MinBruteSalary == 0 ||
@@ -219,10 +212,9 @@ namespace HeroMed_API.Validators
             return true;
         }
 
-        public bool ValidateUserToInsert(User user)
+        public bool ValidateUserToInsert(InsertUserDTO user)
         {
-            if(user.Id == Guid.Empty ||
-               user.EmployeeId == Guid.Empty)
+            if(user.EmployeeId == Guid.Empty)
             {
                 return false;
             }
@@ -230,8 +222,7 @@ namespace HeroMed_API.Validators
 
 
             if(user.Username == "" ||
-               user.Password == "" ||
-               !bool.TryParse(user.Admin.ToString(), out _))
+               user.Password == "")
             {
                 return false;
             }
@@ -296,7 +287,7 @@ namespace HeroMed_API.Validators
             return true;
         }
 
-        public bool ValidateRelationToInsert(Entities.RelationsEntity.PatientEmployee relation)
+        public bool ValidateRelationToInsert(Models.PatientEmployeeDTO relation)
         {
             if(!ValidateGuid(relation.PatientId) ||
                !ValidateGuid(relation.EmployeeId) ||

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HeroMed_API.Entities.RelationsEntity;
 using HeroMed_API.Repositories.PatientEmployee;
 using HeroMed_API.Validators;
 using Microsoft.AspNetCore.Mvc;
@@ -20,55 +21,18 @@ namespace HeroMed_API.Controllers
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetAllRelationsAsync()
+        public ActionResult<IEnumerable<Models.PatientEmployeeDTO>> GetAllRelationsAsync()
         {
             var relationsFromRepo = _patientEmployeeRepository.GetPatientEmployeeRelationsAsync().GetAwaiter().GetResult();
             if (relationsFromRepo.Count() == 0)
             {
                 return NotFound();
             }
-            return Ok(relationsFromRepo);
-        }
-
-        [HttpGet("/patients/{employeeId}")]
-        public ActionResult<IEnumerable<Models.PatientDTO>> GetPatientsByEmployeeId(Guid employeeId)
-        {
-            if (!_validator.ValidateGuid(employeeId))
-            {
-                return BadRequest();
-            }
-
-            var patientsFromRepo = _patientEmployeeRepository.GetEmployeePatientsAsync(employeeId).GetAwaiter().GetResult();
-
-            if (!_validator.ValidateResult(patientsFromRepo))
-            {
-                return NotFound();
-            }
-
-            return Ok(_mapper.Map<Entities.Patient>(patientsFromRepo));
-
-        }
-
-        [HttpGet("/employee/{patientId}")]
-        public ActionResult<IEnumerable<Models.EmployeeDTO>> GetEmployeesByPatientId(Guid patientId)
-        {
-            if (!_validator.ValidateGuid(patientId))
-            {
-                return BadRequest();
-            }
-
-            var employeeFromRepo = _patientEmployeeRepository.GetPatientEmployeeAsync(patientId).GetAwaiter().GetResult();
-
-            if (_validator.ValidateResult(employeeFromRepo))
-            {
-                return NotFound();
-            }
-
-            return Ok(_mapper.Map<Entities.Employee>(employeeFromRepo));
+            return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
         }
 
         [HttpGet("/relationP/{patientId}")]
-        public ActionResult<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetRelationsByPatientId(Guid patientId)
+        public ActionResult<IEnumerable<Models.PatientEmployeeDTO>> GetRelationsByPatientId(Guid patientId)
         {
             if (!_validator.ValidateGuid(patientId))
             {
@@ -82,29 +46,29 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(relationsFromRepo);
+            return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
         }
 
         [HttpGet("/relationE/{employeeId}")]
-        public ActionResult<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetRelationsByEmployeeId(Guid employeeId)
+        public ActionResult<IEnumerable<Models.PatientEmployeeDTO>> GetRelationsByEmployeeId(Guid employeeId)
         {
             if (!_validator.ValidateGuid(employeeId))
             {
                 return BadRequest();
             }
 
-            var relationsFromRepo = _patientEmployeeRepository.GetEmployeePatientsAsync(employeeId).GetAwaiter().GetResult();
+            var relationsFromRepo = _patientEmployeeRepository.GetEmployeePatientsRelationsAsync(employeeId).GetAwaiter().GetResult();
 
             if (!_validator.ValidateResult(relationsFromRepo))
             {
                 return NotFound();
             }
 
-            return Ok(relationsFromRepo);
+            return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
         }
 
-        [HttpGet("/relation/{employeeId}/{patientId}")]
-        public ActionResult<Entities.RelationsEntity.PatientEmployee> GetSpecificRelation(Guid patientId, Guid employeeId)
+        [HttpGet("/relation/{employeeId}/{patientId}", Name = "GetRelationByKey")]
+        public ActionResult<Models.PatientEmployeeDTO> GetSpecificRelation(Guid patientId, Guid employeeId)
         {
             if(!_validator.ValidateGuid(patientId) || !_validator.ValidateGuid(employeeId))
             {
@@ -118,33 +82,47 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(relationFromRepo);
+            return Ok(_mapper.Map<Models.PatientEmployeeDTO>(relationFromRepo));
         }
 
         [HttpPost]
-        public ActionResult AddRelation(Entities.RelationsEntity.PatientEmployee relation)
+        public ActionResult AddRelation(Models.PatientEmployeeDTO relationDTO)
         {
-            if (!_validator.ValidateRelationToInsert(relation))
+            if (!_validator.ValidateRelationToInsert(relationDTO))
             {
                 return UnprocessableEntity();
             }
 
+            var relation = _mapper.Map<PatientEmployee>(relationDTO);
             _patientEmployeeRepository.AddRelation(relation);
 
-            return Ok();
+            return CreatedAtRoute("GetRelationByKey",
+                                   new { employeeId = relation.EmployeeId,patientId = relation.PatientId },
+                                   relationDTO) ;
         }
 
-        [HttpPut]
-        public ActionResult UpdateRelation(Entities.RelationsEntity.PatientEmployee relation)
+        [HttpPut("employee/{employeeId}/patient/{patientId}")]
+        public ActionResult UpdateRelation(Guid employeeId, Guid patientId, Models.PatientEmployeeDTO relationDTO)
         {
-            if (!_validator.ValidateRelationToInsert(relation))
+            if(!_validator.ValidateGuid(employeeId) || !_validator.ValidateGuid(patientId))
+            {
+                return BadRequest();
+            }
+            if (!_validator.ValidateRelationToInsert(relationDTO))
             {
                 return UnprocessableEntity();
             }
 
-            _patientEmployeeRepository.UpdateRelation(relation);
+            if(!_patientEmployeeRepository.RelationExists(employeeId, patientId))
+            {
+                return NotFound();
+            }
 
-            return Ok();
+            var relationFromRepo = _patientEmployeeRepository.GetRelation(employeeId, patientId).GetAwaiter().GetResult();
+            _mapper.Map(relationDTO, relationFromRepo);
+            _patientEmployeeRepository.UpdateRelation(relationFromRepo);
+
+            return NoContent();
         }
 
         [HttpDelete]

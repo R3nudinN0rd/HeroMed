@@ -6,11 +6,9 @@ namespace HeroMed_API.Profiles.Patient
     {
         public PatientProfile()
         {
-            CreateMap<Entities.Patient, Models.PatientDTO>()
-                .ForMember(
-                    dest => dest.Name,
-                    opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}")
-                );
+            CreateMap<Entities.Patient, Models.PatientDTO>().ReverseMap();
+            CreateMap<Entities.Patient, Models.InsertDTOs.InsertPatientDTO>().ReverseMap();
+            CreateMap<Entities.Patient, Models.UpdateDTOs.UpdatePatientDTO>().ReverseMap();
         }
     }
 }

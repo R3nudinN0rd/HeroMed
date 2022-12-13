@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HeroMed_API.Migrations
 {
     [DbContext(typeof(HeroMedContext))]
-    [Migration("20221201223056_secondTest")]
-    partial class secondTest
+    [Migration("20221212135922_FirstTestSwagger")]
+    partial class FirstTestSwagger
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,19 +34,18 @@ namespace HeroMed_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("Birthdate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("Birthdate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DocumentsPath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("EmploymentDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("EmploymentDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -75,11 +74,10 @@ namespace HeroMed_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Salary")
+                    b.Property<decimal?>("Salary")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SalaryCurrency")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SectionId")
@@ -101,10 +99,10 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("0b273992-95bd-4baf-b298-92355f67b620"),
                             Address = "Arges, Pitesti, Strada Mioarei Nr1",
-                            Birthdate = new DateTimeOffset(new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Birthdate = new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentsPath = "X://ToCompute",
                             Email = "unemail@gmail.com",
-                            EmploymentDate = new DateTimeOffset(new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            EmploymentDate = new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Mihai",
                             Gender = "M",
                             JobId = new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f2"),
@@ -121,10 +119,10 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("0b273992-95bd-4baf-b298-92355f67b621"),
                             Address = "Arges, Pitesti, Strada Mioarei Nr1",
-                            Birthdate = new DateTimeOffset(new DateTime(1968, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Birthdate = new DateTime(1968, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentsPath = "X://ToCompute",
                             Email = "altemail@gmail.com",
-                            EmploymentDate = new DateTimeOffset(new DateTime(2000, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            EmploymentDate = new DateTime(2000, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "George",
                             Gender = "M",
                             JobId = new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f2"),
@@ -141,10 +139,10 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("0b273992-95bd-4baf-b298-92355f67b622"),
                             Address = "Arges, Pitesti, Strada Mioarei Nr1",
-                            Birthdate = new DateTimeOffset(new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Birthdate = new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentsPath = "X://ToCompute",
                             Email = "unemail@gmail.com",
-                            EmploymentDate = new DateTimeOffset(new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 3, 0, 0, 0)),
+                            EmploymentDate = new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Mihai",
                             Gender = "M",
                             JobId = new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f3"),
@@ -161,10 +159,10 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("0b273992-95bd-4baf-b298-92355f67b600"),
                             Address = " ",
-                            Birthdate = new DateTimeOffset(new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Birthdate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentsPath = "X://ToCompute",
                             Email = "remusene69@gmail.com",
-                            EmploymentDate = new DateTimeOffset(new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            EmploymentDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "admin",
                             Gender = " ",
                             JobId = new Guid("cdb98091-c8c1-4774-9612-57c4e6fb81f3"),
@@ -559,7 +557,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9246"),
                             Admin = true,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9954), new TimeSpan(0, 2, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 15, 59, 21, 936, DateTimeKind.Unspecified).AddTicks(9075), new TimeSpan(0, 2, 0, 0, 0)),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b600"),
                             Password = "admin",
                             Username = "admin"
@@ -568,7 +566,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9247"),
                             Admin = false,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9968), new TimeSpan(0, 2, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 15, 59, 21, 936, DateTimeKind.Unspecified).AddTicks(9153), new TimeSpan(0, 2, 0, 0, 0)),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620"),
                             Password = "OParola",
                             Username = "UnUSername"
@@ -577,7 +575,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9248"),
                             Admin = false,
-                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 2, 0, 30, 55, 873, DateTimeKind.Unspecified).AddTicks(9973), new TimeSpan(0, 2, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2022, 12, 12, 15, 59, 21, 936, DateTimeKind.Unspecified).AddTicks(9156), new TimeSpan(0, 2, 0, 0, 0)),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621"),
                             Password = "AltaParola",
                             Username = "AltUSername"

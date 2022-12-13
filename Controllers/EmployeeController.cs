@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using HeroMed_API.Entities;
+using HeroMed_API.Models;
+using HeroMed_API.Models.InsertDTOs;
+using HeroMed_API.Models.UpdateDTOs;
 using HeroMed_API.Repositories.Employee;
 using HeroMed_API.Validators;
 using Microsoft.AspNetCore.Cors;
@@ -27,13 +30,13 @@ namespace HeroMed_API.Controllers
         public ActionResult<IEnumerable<Models.EmployeeDTO>> GetEmployees()
         {
             var employeeFromRepo = _employeeRepository.GetAllEmployeesAsync().GetAwaiter().GetResult();
-            return Ok(_mapper.Map<IEnumerable<Employee>>(employeeFromRepo));
+            return Ok(_mapper.Map<IEnumerable<EmployeeDTO>>(employeeFromRepo));
         }
 
         [HttpGet("{employeeId}", Name = "GetEmployeeById")]
         public ActionResult<Models.EmployeeDTO> GetEmployeeById(Guid employeeId)
         {
-            if (_validators.ValidateGuid(employeeId))
+            if (!_validators.ValidateGuid(employeeId))
             {
                 return BadRequest();
             }
@@ -43,9 +46,9 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Employee>(employeeFromRepo));
+            return Ok(_mapper.Map<EmployeeDTO>(employeeFromRepo));
         }
-        [HttpGet("/email/{employeeEmail}",Name = "GetEmployeeByEmail")]
+        [HttpGet("/emailEmployee/{email}",Name = "GetEmployeeByEmail")]
         public ActionResult<Models.EmployeeDTO> GetEmployeeByEmail(string email)
         {
             if (!_validators.ValidateString(email))
@@ -65,16 +68,39 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateEmployee(Entities.Employee employee)
+        public ActionResult CreateEmployee(InsertEmployeeDTO employeeDTO)
         {
-            if (!_validators.ValidateEmployeeToInsert(employee))
-            {
-                return UnprocessableEntity();
-            }
-
+           if (!_validators.ValidateEmployeeToInsert(employeeDTO))
+           {
+               return UnprocessableEntity();
+           }
+           var employee = _mapper.Map<Employee>(employeeDTO);
+            employee.Id = Guid.NewGuid();
             _employeeRepository.AddEmployee(employee);
             return CreatedAtRoute("GetEmployeeById",
-                                  new { employeeId = employee.Id });
+                                  new { employeeId = employee.Id },
+                                  employeeDTO);
+        }
+
+        [HttpPut("{employeeId}")]
+        public ActionResult UpdateEmployee(Guid employeeId, UpdateEmployeeDTO employee)
+        {
+            if (!_validators.ValidateGuid(employeeId))
+            {
+                return BadRequest();
+            }
+
+            if (!_employeeRepository.EmployeeExists(employeeId))
+            {
+                return NotFound();
+            }
+
+            var employeeFromRepo = _employeeRepository.GetEmployeeByIdAsync(employeeId).GetAwaiter().GetResult();
+            _mapper.Map(employee, employeeFromRepo);
+
+            _employeeRepository.UpdateEmployee(employeeFromRepo);
+
+            return NoContent();
         }
 
         [HttpDelete("id/{employeeId}")]
