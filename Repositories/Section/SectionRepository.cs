@@ -1,4 +1,5 @@
 ﻿using HeroMed_API.DatabaseContext;
+using HeroMed_API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HeroMed_API.Repositories.Section
@@ -28,6 +29,19 @@ namespace HeroMed_API.Repositories.Section
         public async Task<Entities.Section> GetSectionByIdAsync(Guid id)
         {
             return await _context.Sections.FirstOrDefaultAsync<Entities.Section>(section => section.Id == id);
+        }
+
+        public void AddSection(Entities.Section section)
+        {
+            try
+            {
+                _context.Sections.Add(section);
+                _context.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public void UpdateSection(Entities.Section section)

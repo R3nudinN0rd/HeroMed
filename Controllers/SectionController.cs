@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HeroMed_API.Entities;
 using HeroMed_API.Models;
+using HeroMed_API.Models.InsertDTOs;
 using HeroMed_API.Models.UpdateDTOs;
 using HeroMed_API.Repositories.Section;
 using HeroMed_API.Validators;
@@ -55,6 +56,21 @@ namespace HeroMed_API.Controllers
 
             return Ok(_mapper.Map<SectionDTO>(sectionFromRepo));
 
+        }
+        [HttpPost]
+        public ActionResult<Section> AddSection(InsertSectionDTO sectionDTO)
+        {
+            if (!_validator.ValidateSectionToInsert(sectionDTO))
+            {
+                return UnprocessableEntity();
+            }
+
+            var section = _mapper.Map<Section>(sectionDTO);
+            section.Id = Guid.NewGuid();
+
+            return CreatedAtRoute("GetSectionById",
+                                 new { sectionId = section.Id },
+                                 sectionDTO);
         }
 
         [HttpPut("{sectionId}")]

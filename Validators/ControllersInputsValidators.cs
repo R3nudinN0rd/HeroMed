@@ -176,13 +176,8 @@ namespace HeroMed_API.Validators
             return true;
         }
 
-        public bool ValidateSectionToInsert(Section section)
+        public bool ValidateSectionToInsert(InsertSectionDTO section)
         {
-            if (section.Id == Guid.Empty)
-            {
-                return false;
-            }
-
             if (section.Title == "" ||
                 section.Description == "" ||
                 section.MaximumEmployeesNo == 0)
