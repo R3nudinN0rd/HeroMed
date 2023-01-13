@@ -6,10 +6,9 @@ namespace HeroMed_API.Profiles.Employee
     {
         public EmployeeProfile()
         {
-            CreateMap<Entities.Employee, Models.EmployeeDTO>()
-                .ForMember(
-                    dest => dest.Name,
-                    opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+            CreateMap<Entities.Employee, Models.EmployeeDTO>().ReverseMap();
+            CreateMap<Entities.Employee, Models.InsertDTOs.InsertEmployeeDTO>().ReverseMap();
+            CreateMap<Entities.Employee, Models.UpdateDTOs.UpdateEmployeeDTO>().ReverseMap();
         }
     }
 }

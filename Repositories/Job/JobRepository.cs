@@ -13,6 +13,15 @@ namespace HeroMed_API.Repositories.Job
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public bool JobExists(Guid jobId)
+        {
+            if(_context.Jobs.FirstOrDefault(job => job.Id == jobId) == null){
+                return false;
+            }
+
+            return true;
+        }
+
         public void AddJob(Entities.Job job)
         {
             try
@@ -46,6 +55,19 @@ namespace HeroMed_API.Repositories.Job
             catch (ArgumentNullException) 
             {
                 throw new ArgumentNullException(nameof(job));
+            }
+        }
+
+        public void DeleteJob(Entities.Job job)
+        {
+            try
+            {
+                _context.Jobs.Remove(job);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw new Exception(nameof(job));
             }
         }
     }

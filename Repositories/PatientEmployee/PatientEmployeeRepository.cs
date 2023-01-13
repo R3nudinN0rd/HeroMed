@@ -11,6 +11,15 @@ namespace HeroMed_API.Repositories.PatientEmployee
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public bool RelationExists(Guid employeeId, Guid patientId)
+        {
+            if(_context.PatientEmployee.FirstOrDefault(relation => relation.EmployeeId == employeeId && relation.PatientId == patientId) == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
         public void AddRelation(Entities.RelationsEntity.PatientEmployee employeePatientRelation)
         {
             try
@@ -43,51 +52,16 @@ namespace HeroMed_API.Repositories.PatientEmployee
             }
         }
 
-        public async Task<IEnumerable<Entities.Patient>> GetEmployeePatientsAsync(Guid employeeId)
-        {
-            IEnumerable<Entities.RelationsEntity.PatientEmployee> patientsIds =await _context.PatientEmployee.Where(r => r.EmployeeId == employeeId).ToListAsync();
-
-            if(patientsIds == null)
-            {
-                throw new ArgumentNullException(nameof(patientsIds));
-            }
-
-            List<Entities.Patient> patients = new List<Entities.Patient>();
-
-            patientsIds.AsParallel().ForAll(i =>
-            {
-                patients.Add(_context.Patients.FirstOrDefault(p => p.Id == i.PatientId));
-            });
-
-            return patients;
-
-        }
 
         public async Task<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetEmployeePatientsRelationsAsync(Guid employeeId)
         {
             return await _context.PatientEmployee.Where(r => r.EmployeeId == employeeId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Entities.Employee>> GetPatientEmployeeAsync(Guid patientId)
+
+        public async Task<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetPatientEmployeeRelationsAsync()
         {
-            IEnumerable<Entities.RelationsEntity.PatientEmployee> employeeIds = await _context.PatientEmployee.Where(r => r.PatientId == patientId).ToListAsync();
-            if(employeeIds == null)
-            {
-                throw new ArgumentNullException(nameof(employeeIds));
-            }
-
-            List<Entities.Employee> employees = new List<Entities.Employee>();
-
-            employeeIds.AsParallel().ForAll(i =>
-            {
-                employees.Add(_context.Employees.FirstOrDefault(e => e.Id == i.EmployeeId));
-            });
-            return employees;
-        }
-
-        public async Task<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetPatientEmployeeRelationsAsync(Guid employeeId)
-        {
-            return await _context.PatientEmployee.Where(r => r.EmployeeId == employeeId).ToListAsync();
+            return await _context.PatientEmployee.ToListAsync();
         }
 
         public async Task<IEnumerable<Entities.RelationsEntity.PatientEmployee>> GetPatientEmployeesRelationsAsync(Guid patientId)
@@ -104,7 +78,9 @@ namespace HeroMed_API.Repositories.PatientEmployee
         {
             try
             {
-                _context.PatientEmployee.Update(employeePatientRelation);
+                _context.PatientEmployee.Remove(employeePatientRelation);
+                _context.SaveChanges();
+                _context.PatientEmployee.Add(employeePatientRelation);
                 _context.SaveChanges();
             }
             catch (ArgumentNullException)

@@ -11,6 +11,16 @@ namespace HeroMed_API.Repositories.Patient
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public bool PatientExists(Guid patientID)
+        {
+            if(_context.Patients.FirstOrDefault(patient => patient.Id == patientID) == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public void AddPatient(Entities.Patient patient)
         {
             try

@@ -6,7 +6,9 @@ using HeroMed_API.Repositories.PatientEmployee;
 using HeroMed_API.Repositories.Salon;
 using HeroMed_API.Repositories.Section;
 using HeroMed_API.Repositories.User;
+using HeroMed_API.Validators;
 using Microsoft.EntityFrameworkCore;
+using TransferServices.SMTP.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,26 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientEmployeeRepository, PatientEmployeeRepository>();
 #endregion
 
+#region MicellaneousServices
+builder.Services.AddScoped<ControllersInputsValidators>();
+builder.Services.AddScoped<IEmailSenderRepository, EmailSenderRepository>();
+#endregion
+
+#region CORS Origins
+var AllowOrigins = "AllowOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod(); ;
+                      });
+});
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +58,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors();
 }
 
 app.UseAuthorization();

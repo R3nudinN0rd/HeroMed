@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
 using HeroMed_API.Entities;
+using HeroMed_API.Models;
+using HeroMed_API.Models.InsertDTOs;
+using HeroMed_API.Models.UpdateDTOs;
 using HeroMed_API.Repositories.Job;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("/api/jobs")]
+    [EnableCors("AllowOrigins")]
     public class JobController:ControllerBase
     {
         private readonly IJobRepository _jobRepository;
@@ -28,10 +33,10 @@ namespace HeroMed_API.Controllers
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<IEnumerable<Job>>(jobsFromRepo));
+            return Ok(_mapper.Map<IEnumerable<JobDTO>>(jobsFromRepo));
         }
 
-        [HttpGet("/{jobId}")]
+        [HttpGet("/job/{jobId}", Name = "GetJobById")]
         public ActionResult<Models.JobDTO> GetJobById(Guid jobId)
         {
             if (!_validator.ValidateGuid(jobId))
@@ -45,26 +50,61 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Job>(jobFromRepo));
+            return Ok(_mapper.Map<JobDTO>(jobFromRepo));
         }
 
         [HttpPost]
-        public ActionResult AddJob(Entities.Job job)
+        public ActionResult AddJob(InsertJobDTO jobDTO)
         {
-            if (!_validator.ValidateJobToInsert(job))
+            if (!_validator.ValidateJobToInsert(jobDTO))
             {
                 return UnprocessableEntity();
             }
-
+            var job = _mapper.Map<Job>(jobDTO);
+            job.Id = Guid.NewGuid();
             _jobRepository.AddJob(job);
-            return Ok();
+            return CreatedAtRoute("GetJobById",
+                                   new { jobId = job.Id},
+                                   jobDTO);
         }
 
-        [HttpPut]
-        public ActionResult UpdateJob(Entities.Job job)
+        [HttpPut("{jobId}")]
+        public ActionResult UpdateJob(Guid jobId, UpdateJobDTO jobDTO)
         {
-            _jobRepository.UpdateJob(job);
-            return Ok();
+            if (!_validator.ValidateGuid(jobId))
+            {
+                return BadRequest();
+            }
+
+            if (!_jobRepository.JobExists(jobId)){
+                return NotFound();
+            }
+
+            var jobFromRepo = _jobRepository.GetJobAsync(jobId).GetAwaiter().GetResult();
+
+            _mapper.Map(jobDTO, jobFromRepo);
+            _jobRepository.UpdateJob(jobFromRepo);
+            return NoContent();
+        }
+
+        [HttpDelete("{jobId}")]
+        public ActionResult DeleteJob(Guid jobId)
+        {
+            if (!_validator.ValidateGuid(jobId))
+            {
+                return BadRequest();
+            }
+
+            var jobFromRepo = _jobRepository.GetJobAsync(jobId).GetAwaiter().GetResult();
+
+            if (!_validator.ValidateResult(jobFromRepo))
+            {
+                return NotFound();
+            }
+
+            _jobRepository.DeleteJob(jobFromRepo);
+
+            return NoContent();
         }
     }
 }

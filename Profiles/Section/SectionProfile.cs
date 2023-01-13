@@ -6,7 +6,8 @@ namespace HeroMed_API.Profiles.Section
     {
         public SectionProfile()
         {
-            CreateMap<Entities.Section, Models.SalonDTO>();
+            CreateMap<Entities.Section, Models.SectionDTO>().ReverseMap();
+            CreateMap<Entities.Section, Models.UpdateDTOs.UpdateSectionDTO>().ReverseMap();
         }
     }
 }

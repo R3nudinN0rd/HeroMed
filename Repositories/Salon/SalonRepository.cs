@@ -11,6 +11,15 @@ namespace HeroMed_API.Repositories.Salon
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public bool SalonExists(Guid salonID)
+        {
+            if(_context.Salons.FirstOrDefault(salon => salon.Id == salonID)==null)
+            {
+                return false;
+            }
+
+            return true;
+        }
         public async Task<IEnumerable<Entities.Salon>> GetAllSalonsAsync()
         {
             return await _context.Salons.ToListAsync();

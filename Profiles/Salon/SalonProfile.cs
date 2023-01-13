@@ -6,7 +6,8 @@ namespace HeroMed_API.Profiles.Salon
     {
         public SalonProfile()
         {
-            CreateMap<Entities.Salon, Models.SalonDTO>();
+            CreateMap<Entities.Salon, Models.SalonDTO>().ReverseMap();
+            CreateMap<Entities.Salon, Models.UpdateDTOs.UpdateSalonDTO>().ReverseMap();
         }
     }
 }

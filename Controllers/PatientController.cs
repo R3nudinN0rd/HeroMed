@@ -1,14 +1,19 @@
 ﻿using AutoMapper;
 using HeroMed_API.DatabaseContext;
 using HeroMed_API.Entities;
+using HeroMed_API.Models;
+using HeroMed_API.Models.InsertDTOs;
+using HeroMed_API.Models.UpdateDTOs;
 using HeroMed_API.Repositories.Patient;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("/api/patient")]
+    [EnableCors("AllowOrigins")]
     public class PatientController : ControllerBase
     {
         private readonly IPatientRepository _patientRepository;
@@ -33,21 +38,21 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Patient>>(patientsFromRepo));
         }
 
-        [HttpGet("/id/{id}")]
-        public ActionResult<Models.PatientDTO> GetPatientById(Guid id)
+        [HttpGet("/id/{patientId}", Name = "GetPatientById")]
+        public ActionResult<Models.PatientDTO> GetPatientById(Guid patientId)
         {
-            if (!_validator.ValidateGuid(id))
+            if (!_validator.ValidateGuid(patientId))
             {
                 return UnprocessableEntity();
             }
 
-            var patientFromRepo = _patientRepository.GetPatientByIdAsync(id).GetAwaiter().GetResult();
+            var patientFromRepo = _patientRepository.GetPatientByIdAsync(patientId).GetAwaiter().GetResult();
             if (!_validator.ValidateResult(patientFromRepo))
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Patient>(patientFromRepo));
+            return Ok(_mapper.Map<PatientDTO>(patientFromRepo));
         }
 
         [HttpGet("/email/{email}")]
@@ -65,11 +70,11 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Patient>(patientFromRepo));
+            return Ok(_mapper.Map<PatientDTO>(patientFromRepo));
 
         }
 
-        [HttpGet("/salon/{salonId}")]
+        [HttpGet("/patientSalon/{salonId}")]
         public ActionResult<IEnumerable<Models.PatientDTO>> GetPatientsBySalon(Guid salonId)
         {
             if (!_validator.ValidateGuid(salonId))
@@ -84,24 +89,49 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<Patient>>(patientFromRepo));
+            return Ok(_mapper.Map<IEnumerable<PatientDTO>>(patientFromRepo));
         }
 
         [HttpPost]
-        public ActionResult AddPatient(Patient patient)
+        public ActionResult AddPatient(InsertPatientDTO patientDTO)
         {
-            if (!_validator.ValidatePatientToInsert(patient))
+            if (!_validator.ValidatePatientToInsert(patientDTO))
             {
                 return UnprocessableEntity();
             }
-            
+
+            var patient = _mapper.Map<Patient>(patientDTO);
+            patient.Id = Guid.NewGuid();
             _patientRepository.AddPatient(patient);
 
-            return Ok();
+            return CreatedAtRoute("GetPatientById",
+                                  new {patientId = patient.Id},
+                                  patientDTO);
 
         }
 
-        [HttpDelete("/{id}")]
+        [HttpPut("{patientId}")]
+        public ActionResult UpdatePatient(Guid patientId, UpdatePatientDTO patientDTO)
+        {
+            if (!_validator.ValidateGuid(patientId))
+            {
+                return BadRequest();
+            }
+
+            if (!_patientRepository.PatientExists(patientId))
+            {
+                return NotFound();
+            }
+
+            var patientFromRepo = _patientRepository.GetPatientByIdAsync(patientId).GetAwaiter().GetResult();
+
+            _mapper.Map(patientDTO, patientFromRepo);
+            _patientRepository.UpdatePatient(patientFromRepo);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
         public ActionResult DeletePatient(Guid id)
         {
             if (!_validator.ValidateGuid(id))

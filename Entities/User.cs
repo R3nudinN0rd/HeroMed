@@ -17,7 +17,7 @@ namespace HeroMed_API.Entities
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Created date is a required field!")]
-        public DateTimeOffset CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         [Required(ErrorMessage = "Admin is a required field!"), DefaultValue(false)]
         public bool Admin { get; set; }

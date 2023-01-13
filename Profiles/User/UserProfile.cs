@@ -6,7 +6,9 @@ namespace HeroMed_API.Profiles.User
     {
         public UserProfile()
         {
-            CreateMap<Entities.User, Models.UserDTO>();
+            CreateMap<Entities.User, Models.UserDTO>().ReverseMap();
+            CreateMap<Entities.User, Models.InsertDTOs.InsertUserDTO>().ReverseMap();
+            CreateMap<Entities.User, Models.UpdateDTOs.UpdateUserDTO>().ReverseMap();
         }
     }
 }

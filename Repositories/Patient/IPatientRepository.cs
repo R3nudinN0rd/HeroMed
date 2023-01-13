@@ -9,5 +9,6 @@
         void AddPatient(Entities.Patient patient);
         void DeletePatient(Guid id);
         void UpdatePatient(Entities.Patient patient);
+        bool PatientExists(Guid patientId);
     }
 }

@@ -7,5 +7,6 @@
         Task<IEnumerable<Entities.Salon>> GetAvailableSalonsAsync();
         Task<Entities.Salon> GetSalonByIdAsync(Guid Id);
         void UpdateSalon(Entities.Salon salon);
+        bool SalonExists(Guid salonID);
     }
 }
