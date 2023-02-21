@@ -6,7 +6,9 @@
         Task<IEnumerable<Entities.Salon>> GetSalonBySectionAsync(Guid sectionId);
         Task<IEnumerable<Entities.Salon>> GetAvailableSalonsAsync();
         Task<Entities.Salon> GetSalonByIdAsync(Guid Id);
+        void AddSalon(Entities.Salon salon);
         void UpdateSalon(Entities.Salon salon);
+        void DeleteSalon(Guid Id);
         bool SalonExists(Guid salonID);
     }
 }
