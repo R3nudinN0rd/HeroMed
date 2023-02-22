@@ -38,7 +38,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Patient>>(patientsFromRepo));
         }
 
-        [HttpGet("/id/{patientId}", Name = "GetPatientById")]
+        [HttpGet("id/{patientId}", Name = "GetPatientById")]
         public ActionResult<Models.PatientDTO> GetPatientById(Guid patientId)
         {
             if (!_validator.ValidateGuid(patientId))
@@ -55,7 +55,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<PatientDTO>(patientFromRepo));
         }
 
-        [HttpGet("/email/{email}")]
+        [HttpGet("email/{email}")]
         public ActionResult<Models.PatientDTO> GetPatientByEmail(string email)
         {
             if (!_validator.ValidateString(email))
@@ -74,7 +74,7 @@ namespace HeroMed_API.Controllers
 
         }
 
-        [HttpGet("/patientSalon/{salonId}")]
+        [HttpGet("patientSalon/{salonId}")]
         public ActionResult<IEnumerable<Models.PatientDTO>> GetPatientsBySalon(Guid salonId)
         {
             if (!_validator.ValidateGuid(salonId))
