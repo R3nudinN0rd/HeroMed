@@ -7,8 +7,8 @@
         public Guid SectionId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime Birthdate { get; set; }
-        public DateTime EmployementDate { get; set; }
+        public DateTimeOffset Birthdate { get; set; }
+        public DateTimeOffset EmployementDate { get; set; }
         public string PlaceOfBirth { get; set; }
         public string Nationality { get; set; }
         public string Address { get; set; }

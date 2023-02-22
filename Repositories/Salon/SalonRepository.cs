@@ -1,4 +1,5 @@
 ﻿using HeroMed_API.DatabaseContext;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace HeroMed_API.Repositories.Salon
@@ -25,6 +26,7 @@ namespace HeroMed_API.Repositories.Salon
             return await _context.Salons.ToListAsync();
         }
 
+
         public async Task<IEnumerable<Entities.Salon>> GetAvailableSalonsAsync()
         {
             return await _context.Salons.Where(s => s.Available == true)
@@ -41,6 +43,19 @@ namespace HeroMed_API.Repositories.Salon
             return await _context.Salons.Where(s => s.SectionId == sectionId).ToListAsync();
         }
 
+        public void AddSalon(Entities.Salon salon)
+        {
+            try
+            {
+                _context.Salons.Add(salon);
+                _context.SaveChanges();
+            }
+            catch(SqlException ex)
+            {
+                throw ex;
+            }
+        }
+
         public void UpdateSalon(Entities.Salon salon)
         {
             try
@@ -51,6 +66,21 @@ namespace HeroMed_API.Repositories.Salon
             catch (ArgumentNullException)
             {
                 throw new ArgumentNullException(nameof(salon));
+            }
+        }
+
+        public void DeleteSalon(Guid id)
+        {
+            try
+            {
+                var salon = _context.Salons.FirstOrDefault(s => s.Id == id);
+                if (salon == null) throw new ArgumentNullException(nameof(salon));
+                _context.Salons.Remove(salon);
+                _context.SaveChanges();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
             }
         }
     }

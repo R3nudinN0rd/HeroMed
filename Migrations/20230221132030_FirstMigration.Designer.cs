@@ -4,6 +4,7 @@ using HeroMed_API.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HeroMed_API.Migrations
 {
     [DbContext(typeof(HeroMedContext))]
-    partial class HeroMedContextModelSnapshot : ModelSnapshot
+    [Migration("20230221132030_FirstMigration")]
+    partial class FirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -432,9 +434,6 @@ namespace HeroMed_API.Migrations
                     b.Property<int>("Floor")
                         .HasColumnType("int");
 
-                    b.Property<int>("SalonNumber")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("SectionId")
                         .HasColumnType("uniqueidentifier");
 
@@ -451,7 +450,6 @@ namespace HeroMed_API.Migrations
                             Available = true,
                             Beds = 4,
                             Floor = 2,
-                            SalonNumber = 1,
                             SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb82")
                         },
                         new
@@ -460,7 +458,6 @@ namespace HeroMed_API.Migrations
                             Available = true,
                             Beds = 3,
                             Floor = 1,
-                            SalonNumber = 2,
                             SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb83")
                         },
                         new
@@ -469,7 +466,6 @@ namespace HeroMed_API.Migrations
                             Available = true,
                             Beds = 4,
                             Floor = 1,
-                            SalonNumber = 3,
                             SectionId = new Guid("10261ba6-d3f9-48bb-b48f-12bf7a43bb83")
                         });
                 });
@@ -561,7 +557,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9246"),
                             Admin = true,
-                            CreatedDate = new DateTime(2023, 2, 21, 16, 18, 23, 357, DateTimeKind.Local).AddTicks(5151),
+                            CreatedDate = new DateTime(2023, 2, 21, 15, 20, 30, 221, DateTimeKind.Local).AddTicks(2374),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b600"),
                             Password = "admin",
                             Username = "admin"
@@ -570,7 +566,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9247"),
                             Admin = false,
-                            CreatedDate = new DateTime(2023, 2, 21, 16, 18, 23, 357, DateTimeKind.Local).AddTicks(5162),
+                            CreatedDate = new DateTime(2023, 2, 21, 15, 20, 30, 221, DateTimeKind.Local).AddTicks(2386),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620"),
                             Password = "OParola",
                             Username = "UnUSername"
@@ -579,7 +575,7 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9248"),
                             Admin = false,
-                            CreatedDate = new DateTime(2023, 2, 21, 16, 18, 23, 357, DateTimeKind.Local).AddTicks(5165),
+                            CreatedDate = new DateTime(2023, 2, 21, 15, 20, 30, 221, DateTimeKind.Local).AddTicks(2388),
                             EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621"),
                             Password = "AltaParola",
                             Username = "AltUSername"

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using HeroMed_API.DatabaseContext;
+using HeroMed_API.Entities;
+using HeroMed_API.Models;
 using HeroMed_API.Models.UpdateDTOs;
 using HeroMed_API.Repositories.Salon;
 using HeroMed_API.Validators;
@@ -67,7 +69,7 @@ namespace HeroMed_API.Controllers
         }
 
 
-        [HttpGet("id/{id}")]
+        [HttpGet("id/{id}",Name = "GetSalonById")]
         public ActionResult<Models.SalonDTO> GetSalonById(Guid id)
         {
             if (!_validator.ValidateGuid(id))
@@ -83,6 +85,24 @@ namespace HeroMed_API.Controllers
             }
 
             return Ok(_mapper.Map<Models.SalonDTO>(salonFromRepo));
+        }
+
+        [HttpPost]
+        public ActionResult AddSalon(Models.InsertDTOs.InsertSalonDTO salonDTO)
+        {
+            if (!_validator.ValidateSalonToInsert(salonDTO))
+            {
+                return UnprocessableEntity();
+            }
+
+            var salon = _mapper.Map<Salon>(salonDTO);
+            salon.Id = Guid.NewGuid();
+
+            _salonRepository.AddSalon(salon);
+
+            return CreatedAtRoute("GetSalonById",
+                                  new { id = salon.Id },
+                                  salonDTO);
         }
 
         [HttpPut("{salonId}")]
@@ -102,6 +122,17 @@ namespace HeroMed_API.Controllers
 
             _mapper.Map(salonDTO, salonFromRepo);
             _salonRepository.UpdateSalon(salonFromRepo);
+            return NoContent();
+        }
+        [HttpDelete("{salonId}")]
+        public ActionResult DeleteSalon(Guid salonId)
+        {
+            if (!_validator.ValidateGuid(salonId))
+            {
+                return BadRequest();
+            }
+
+            _salonRepository.DeleteSalon(salonId);
             return NoContent();
         }
     }

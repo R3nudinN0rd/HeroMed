@@ -17,10 +17,10 @@ namespace HeroMed_API.Entities
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Birthdate is a required field!")]
-        public DateTime Birthdate { get; set; }
+        public DateTimeOffset Birthdate { get; set; }
 
         [Required(ErrorMessage = "Employment date is a required field!")]
-        public DateTime EmploymentDate { get; set; }
+        public DateTimeOffset EmploymentDate { get; set; }
 
         [Required(ErrorMessage = "Place of birth is a required field!")]
         public string PlaceOfBirth { get; set; }

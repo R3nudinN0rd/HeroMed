@@ -39,7 +39,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<SectionDTO>>(sectionsFromRepo));
         }
 
-        [HttpGet("/section/{sectionId}")]
+        [HttpGet("section/{sectionId}", Name = "GetSectionById")]
         public ActionResult<SectionDTO> GetSectionById(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))
@@ -67,6 +67,8 @@ namespace HeroMed_API.Controllers
 
             var section = _mapper.Map<Section>(sectionDTO);
             section.Id = Guid.NewGuid();
+
+            _sectionRepository.AddSection(section);
 
             return CreatedAtRoute("GetSectionById",
                                  new { sectionId = section.Id },
