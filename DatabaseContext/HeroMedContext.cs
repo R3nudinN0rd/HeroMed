@@ -227,6 +227,7 @@ namespace HeroMed_API.DatabaseContext
                     Floor = 2,
                     Beds = 4,
                     Available = true,
+                    SalonNumber = 1,
                     SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb82"),
                 },
                 new Salon()
@@ -235,6 +236,7 @@ namespace HeroMed_API.DatabaseContext
                     Floor = 1,
                     Beds = 3,
                     Available = true,
+                    SalonNumber= 2,
                     SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb83") 
                 },
                 new Salon()
@@ -243,6 +245,7 @@ namespace HeroMed_API.DatabaseContext
                     Floor = 1,
                     Beds = 4,
                     Available = true,
+                    SalonNumber= 3,
                     SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb83")
                 }
                 );

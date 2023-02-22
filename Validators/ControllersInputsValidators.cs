@@ -245,10 +245,9 @@ namespace HeroMed_API.Validators
             return true;
         } 
 
-        public bool ValidateSalonToInsert(Entities.Salon salon)
+        public bool ValidateSalonToInsert(Models.InsertDTOs.InsertSalonDTO salon)
         {
-            if(salon.Id == Guid.Empty ||
-               salon.SectionId == Guid.Empty)
+            if(salon.SectionId == Guid.Empty)
             {
                 return false;
             }
