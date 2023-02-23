@@ -1,4 +1,5 @@
 ﻿using HeroMed_API.DatabaseContext;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace HeroMed_API.Repositories.PatientEmployee
@@ -20,16 +21,17 @@ namespace HeroMed_API.Repositories.PatientEmployee
 
             return true;
         }
-        public void AddRelation(Entities.RelationsEntity.PatientEmployee employeePatientRelation)
+        public async Task<Entities.RelationsEntity.PatientEmployee> AddRelationAsync(Entities.RelationsEntity.PatientEmployee employeePatientRelation)
         {
             try
             {
                 _context.PatientEmployee.Add(employeePatientRelation);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return employeePatientRelation;
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(employeePatientRelation));
+                throw ex;
             }
         }
 
@@ -46,9 +48,9 @@ namespace HeroMed_API.Repositories.PatientEmployee
                 _context.PatientEmployee.Remove(relation);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(employeeId), nameof(patientId));
+                throw ex;
             }
         }
 
@@ -69,7 +71,7 @@ namespace HeroMed_API.Repositories.PatientEmployee
             return await _context.PatientEmployee.Where(r => r.PatientId == patientId).ToListAsync();
         }
 
-        public async Task<Entities.RelationsEntity.PatientEmployee> GetRelation(Guid employeeId, Guid patientId)
+        public async Task<Entities.RelationsEntity.PatientEmployee> GetRelationAsync(Guid employeeId, Guid patientId)
         {
             return await _context.PatientEmployee.FirstOrDefaultAsync(r => r.EmployeeId == employeeId && r.PatientId == patientId);
         }
@@ -83,9 +85,9 @@ namespace HeroMed_API.Repositories.PatientEmployee
                 _context.PatientEmployee.Add(employeePatientRelation);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(employeePatientRelation));
+                throw ex;
             }
         }
     }

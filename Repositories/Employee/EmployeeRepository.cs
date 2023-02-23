@@ -1,5 +1,6 @@
 ﻿using HeroMed_API.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 using System.Runtime.Remoting;
 
 namespace HeroMed_API.Repositories.Employee
@@ -20,14 +21,15 @@ namespace HeroMed_API.Repositories.Employee
             return false;
         }
 
-        public void AddEmployee(Entities.Employee employee)
+        public async Task<Entities.Employee> AddEmployeeAsync(Entities.Employee employee)
         {
             try
             {
                 _context.Employees.Add(employee);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return employee;
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 throw ex;
             }
@@ -40,9 +42,9 @@ namespace HeroMed_API.Repositories.Employee
                 _context.Employees.Remove(employee);
                 _context.SaveChanges();
             }
-            catch(Exception) 
+            catch(SqlException ex) 
             {
-                throw new Exception(nameof(employee));
+                throw ex;
             }
         }
 
@@ -69,9 +71,9 @@ namespace HeroMed_API.Repositories.Employee
                 _context.Employees.Update(employee);
                 _context.SaveChanges();
             }
-            catch(Exception)
+            catch(SqlException ex)
             {
-                throw new Exception(nameof(employee));
+                throw ex;
             }
         }
 

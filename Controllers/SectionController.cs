@@ -28,7 +28,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Models.SectionDTO>> GetAllSections()
+        public async Task<ActionResult<IEnumerable<Models.SectionDTO>>> GetAllSections()
         {
             var sectionsFromRepo = _sectionRepository.GetAllSectionsAsync().GetAwaiter().GetResult();
             if (!_validator.ValidateResult(sectionsFromRepo))
@@ -40,7 +40,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet("section/{sectionId}", Name = "GetSectionById")]
-        public ActionResult<SectionDTO> GetSectionById(Guid sectionId)
+        public async Task<ActionResult<SectionDTO>> GetSectionById(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))
             {
@@ -58,7 +58,7 @@ namespace HeroMed_API.Controllers
 
         }
         [HttpPost]
-        public ActionResult<Section> AddSection(InsertSectionDTO sectionDTO)
+        public async Task<ActionResult<Section>> AddSection(InsertSectionDTO sectionDTO)
         {
             if (!_validator.ValidateSectionToInsert(sectionDTO))
             {
@@ -68,7 +68,7 @@ namespace HeroMed_API.Controllers
             var section = _mapper.Map<Section>(sectionDTO);
             section.Id = Guid.NewGuid();
 
-            _sectionRepository.AddSection(section);
+            await _sectionRepository.AddSectionAsync(section);
 
             return CreatedAtRoute("GetSectionById",
                                  new { sectionId = section.Id },
@@ -76,7 +76,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPut("{sectionId}")]
-        public ActionResult UpdateSection(Guid sectionId, UpdateSectionDTO sectionDTO)
+        public async Task<ActionResult> UpdateSection(Guid sectionId, UpdateSectionDTO sectionDTO)
         {
             if (!_validator.ValidateGuid(sectionId))
             {

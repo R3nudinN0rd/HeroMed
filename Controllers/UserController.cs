@@ -28,7 +28,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet,HttpHead]
-        public ActionResult<IEnumerable<Models.UserDTO>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<Models.UserDTO>>> GetAllUsers()
         {
             var usersFromRepo = _userRepository.GetAllUsersAsync().GetAwaiter().GetResult();
             if (!_validator.ValidateResult(usersFromRepo))
@@ -39,7 +39,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.UserDTO>>(usersFromRepo));
         }
         [HttpGet("id/{userId}", Name = "GetUSerById")]
-        public ActionResult<Models.UserDTO> GetUserById(Guid userId)
+        public async Task<ActionResult<Models.UserDTO>> GetUserById(Guid userId)
         {
             if (!_validator.ValidateGuid(userId))
             {
@@ -56,7 +56,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<UserDTO>(userFromRepo));
         }
         [HttpGet("/admins")]
-        public ActionResult<IEnumerable<Models.UserDTO>> GetAdmins()
+        public async Task<ActionResult<IEnumerable<Models.UserDTO>>> GetAdmins()
         {
             var usersFromRepo = _userRepository.GetAdminsAsync().GetAwaiter().GetResult();
 
@@ -68,7 +68,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet("empl/{employeeId}")]
-        public ActionResult<Models.UserDTO> GetUserByEmplId(Guid employeeId)
+        public async Task<ActionResult<Models.UserDTO>> GetUserByEmplId(Guid employeeId)
         {
             if (!_validator.ValidateGuid(employeeId))
             {
@@ -86,7 +86,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUser(InsertUserDTO userDTO)
+        public async Task<ActionResult> AddUser(InsertUserDTO userDTO)
         {
             Encryptor crypt = new Encryptor();
             if(!_validator.ValidateUserToInsert(userDTO))
@@ -99,7 +99,7 @@ namespace HeroMed_API.Controllers
             user.CreatedDate = DateTime.Now;
             user.Admin = false;
             user.Password = crypt.CreateMD5Hash(user.Password);
-            _userRepository.AddUser(user);
+            await _userRepository.AddUserAsync(user);
 
             return CreatedAtRoute("GetUserById",
                                   new {userId = user.Id },
@@ -107,7 +107,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPut("userId")]
-        public ActionResult UpdateUser(Guid userId, UpdateUserDTO userDTO)
+        public async Task<ActionResult> UpdateUser(Guid userId, UpdateUserDTO userDTO)
         {
             Encryptor crypt = new Encryptor();
             if(!_validator.ValidateGuid(userId))
@@ -129,7 +129,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpDelete("username/{username}")]
-        public ActionResult DeleteUser(string username)
+        public async Task<ActionResult> DeleteUser(string username)
         {
             if(username == "")
             {
@@ -141,7 +141,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpDelete("id/{userId}")]
-        public ActionResult DeleteUser(Guid userId)
+        public async Task<ActionResult> DeleteUser(Guid userId)
         {
             if (!_validator.ValidateGuid(userId))
             {

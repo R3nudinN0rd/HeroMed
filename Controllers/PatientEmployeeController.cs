@@ -21,7 +21,7 @@ namespace HeroMed_API.Controllers
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Models.PatientEmployeeDTO>> GetAllRelationsAsync()
+        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetAllRelationsAsync()
         {
             var relationsFromRepo = _patientEmployeeRepository.GetPatientEmployeeRelationsAsync().GetAwaiter().GetResult();
             if (relationsFromRepo.Count() == 0)
@@ -32,7 +32,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet("/relationP/{patientId}")]
-        public ActionResult<IEnumerable<Models.PatientEmployeeDTO>> GetRelationsByPatientId(Guid patientId)
+        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetRelationsByPatientId(Guid patientId)
         {
             if (!_validator.ValidateGuid(patientId))
             {
@@ -50,7 +50,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet("/relationE/{employeeId}")]
-        public ActionResult<IEnumerable<Models.PatientEmployeeDTO>> GetRelationsByEmployeeId(Guid employeeId)
+        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetRelationsByEmployeeId(Guid employeeId)
         {
             if (!_validator.ValidateGuid(employeeId))
             {
@@ -75,7 +75,7 @@ namespace HeroMed_API.Controllers
                 return BadRequest();
             }
 
-            var relationFromRepo = _patientEmployeeRepository.GetRelation(employeeId, patientId).GetAwaiter().GetResult();
+            var relationFromRepo = _patientEmployeeRepository.GetRelationAsync(employeeId, patientId).GetAwaiter().GetResult();
 
             if (!_validator.ValidateResult(relationFromRepo))
             {
@@ -86,7 +86,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddRelation(Models.PatientEmployeeDTO relationDTO)
+        public async Task<ActionResult> AddRelation(Models.PatientEmployeeDTO relationDTO)
         {
             if (!_validator.ValidateRelationToInsert(relationDTO))
             {
@@ -94,7 +94,7 @@ namespace HeroMed_API.Controllers
             }
 
             var relation = _mapper.Map<PatientEmployee>(relationDTO);
-            _patientEmployeeRepository.AddRelation(relation);
+            await _patientEmployeeRepository.AddRelationAsync(relation);
 
             return CreatedAtRoute("GetRelationByKey",
                                    new { employeeId = relation.EmployeeId,patientId = relation.PatientId },
@@ -102,7 +102,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPut("employee/{employeeId}/patient/{patientId}")]
-        public ActionResult UpdateRelation(Guid employeeId, Guid patientId, Models.PatientEmployeeDTO relationDTO)
+        public async Task<ActionResult> UpdateRelation(Guid employeeId, Guid patientId, Models.PatientEmployeeDTO relationDTO)
         {
             if(!_validator.ValidateGuid(employeeId) || !_validator.ValidateGuid(patientId))
             {
@@ -118,7 +118,7 @@ namespace HeroMed_API.Controllers
                 return NotFound();
             }
 
-            var relationFromRepo = _patientEmployeeRepository.GetRelation(employeeId, patientId).GetAwaiter().GetResult();
+            var relationFromRepo = _patientEmployeeRepository.GetRelationAsync(employeeId, patientId).GetAwaiter().GetResult();
             _mapper.Map(relationDTO, relationFromRepo);
             _patientEmployeeRepository.UpdateRelation(relationFromRepo);
 
@@ -126,7 +126,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpDelete]
-        public ActionResult DeleteRelation(Guid employeeId, Guid patientId)
+        public async Task<ActionResult> DeleteRelation(Guid employeeId, Guid patientId)
         {
             if(!_validator.ValidateGuid(employeeId) || !_validator.ValidateGuid(patientId))
             {
