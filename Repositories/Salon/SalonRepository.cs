@@ -43,12 +43,13 @@ namespace HeroMed_API.Repositories.Salon
             return await _context.Salons.Where(s => s.SectionId == sectionId).ToListAsync();
         }
 
-        public void AddSalon(Entities.Salon salon)
+        public async Task<Entities.Salon> AddSalonAsync(Entities.Salon salon)
         {
             try
             {
                 _context.Salons.Add(salon);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return salon;
             }
             catch(SqlException ex)
             {
@@ -63,9 +64,9 @@ namespace HeroMed_API.Repositories.Salon
                 _context.Update(salon);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(salon));
+                throw ex;
             }
         }
 

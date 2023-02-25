@@ -1,5 +1,6 @@
 ﻿using HeroMed_API.DatabaseContext;
 using HeroMed_API.Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace HeroMed_API.Repositories.User
@@ -22,16 +23,17 @@ namespace HeroMed_API.Repositories.User
             return true;
         }
 
-        public void AddUser(Entities.User user)
+        public async Task<Entities.User> AddUserAsync(Entities.User user)
         {
             try
             {
                 _context.Users.Add(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return user;
             }
-            catch(ArgumentNullException)
+            catch(SqlException ex)
             {
-                throw new ArgumentException(nameof(user));
+                throw ex;
             }
         }
 
@@ -47,9 +49,9 @@ namespace HeroMed_API.Repositories.User
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(username));
+                throw ex;
             }
         }
 
@@ -60,7 +62,7 @@ namespace HeroMed_API.Repositories.User
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
-            catch(Exception ex)
+            catch(SqlException ex)
             {
                 throw ex;
             }
@@ -98,9 +100,9 @@ namespace HeroMed_API.Repositories.User
                 _context.Users.Update(user);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(user));
+                throw ex;
             }
         }
     }

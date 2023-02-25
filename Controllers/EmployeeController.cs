@@ -27,14 +27,14 @@ namespace HeroMed_API.Controllers
 
 
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Models.EmployeeDTO>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<Models.EmployeeDTO>>> GetEmployees()
         {
             var employeeFromRepo = _employeeRepository.GetAllEmployeesAsync().GetAwaiter().GetResult();
             return Ok(_mapper.Map<IEnumerable<EmployeeDTO>>(employeeFromRepo));
         }
 
         [HttpGet("{employeeId}", Name = "GetEmployeeById")]
-        public ActionResult<Models.EmployeeDTO> GetEmployeeById(Guid employeeId)
+        public async Task<ActionResult<Models.EmployeeDTO>> GetEmployeeById(Guid employeeId)
         {
             if (!_validators.ValidateGuid(employeeId))
             {
@@ -49,7 +49,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<EmployeeDTO>(employeeFromRepo));
         }
         [HttpGet("/emailEmployee/{email}",Name = "GetEmployeeByEmail")]
-        public ActionResult<Models.EmployeeDTO> GetEmployeeByEmail(string email)
+        public async Task<ActionResult<Models.EmployeeDTO>> GetEmployeeByEmail(string email)
         {
             if (!_validators.ValidateString(email))
             {
@@ -68,7 +68,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateEmployee(InsertEmployeeDTO employeeDTO)
+        public async Task<ActionResult> CreateEmployee(InsertEmployeeDTO employeeDTO)
         {
            if (!_validators.ValidateEmployeeToInsert(employeeDTO))
            {
@@ -76,14 +76,14 @@ namespace HeroMed_API.Controllers
            }
            var employee = _mapper.Map<Employee>(employeeDTO);
             employee.Id = Guid.NewGuid();
-            _employeeRepository.AddEmployee(employee);
+            await _employeeRepository.AddEmployeeAsync(employee);
             return CreatedAtRoute("GetEmployeeById",
                                   new { employeeId = employee.Id },
                                   employeeDTO);
         }
 
         [HttpPut("{employeeId}")]
-        public ActionResult UpdateEmployee(Guid employeeId, UpdateEmployeeDTO employee)
+        public async Task<ActionResult> UpdateEmployee(Guid employeeId, UpdateEmployeeDTO employee)
         {
             if (!_validators.ValidateGuid(employeeId))
             {
@@ -104,7 +104,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpDelete("id/{employeeId}")]
-        public ActionResult DeleteEmployee(Guid employeeId)
+        public async Task<ActionResult> DeleteEmployee(Guid employeeId)
         {
             if (!_validators.ValidateGuid(employeeId))
             {

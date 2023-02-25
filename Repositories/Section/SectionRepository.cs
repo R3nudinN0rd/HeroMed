@@ -1,6 +1,7 @@
 ﻿using HeroMed_API.DatabaseContext;
 using HeroMed_API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 
 namespace HeroMed_API.Repositories.Section
 {
@@ -31,14 +32,15 @@ namespace HeroMed_API.Repositories.Section
             return await _context.Sections.FirstOrDefaultAsync<Entities.Section>(section => section.Id == id);
         }
 
-        public void AddSection(Entities.Section section)
+        public async Task<Entities.Section> AddSectionAsync(Entities.Section section)
         {
             try
             {
                 _context.Sections.Add(section);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return section;
             }
-            catch(Exception ex)
+            catch(SqlException ex)
             {
                 throw ex;
             }
@@ -51,9 +53,9 @@ namespace HeroMed_API.Repositories.Section
                 _context.Sections.Update(section);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(section));
+                throw ex;
             }
         }
     }

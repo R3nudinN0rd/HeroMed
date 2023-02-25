@@ -4,7 +4,7 @@
     {
         Task<IEnumerable<Entities.Job>> GetAllJobsAsync();
         Task<Entities.Job> GetJobAsync(Guid jobId);
-        void AddJob(Entities.Job job);
+        Task<Entities.Job> AddJobAsync(Entities.Job job);
         void UpdateJob (Entities.Job job);
         void DeleteJob(Entities.Job jobID);
         bool JobExists(Guid jobId);
