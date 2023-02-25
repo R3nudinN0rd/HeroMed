@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
+    /*tEST for merging*/
     [ApiController]
     [Route("/api/patient")]
     [EnableCors("AllowOrigins")]
