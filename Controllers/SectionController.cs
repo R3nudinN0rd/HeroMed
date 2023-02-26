@@ -94,5 +94,18 @@ namespace HeroMed_API.Controllers
             _sectionRepository.UpdateSection(sectionFromRepo);
             return NoContent();
         }
+
+        [HttpDelete("{sectionId}")]
+        public async Task<ActionResult> DeleteSection(Guid sectionId)
+        {
+            if (!_validator.ValidateGuid(sectionId))
+            {
+                return BadRequest();
+            }
+
+            _sectionRepository.DeleteSection(sectionId);
+
+            return NoContent();
+        }
     }
 }

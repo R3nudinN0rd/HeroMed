@@ -38,6 +38,13 @@ namespace HeroMed_API.Repositories.Salon
             return await _context.Salons.FirstOrDefaultAsync(s => s.Id == Id);
         }
 
+        public async Task<Models.SingleValueDTOs.IntegerDTO> GetNumberOfPatients(Guid Id)
+        {
+            Models.SingleValueDTOs.IntegerDTO integerDTO = new Models.SingleValueDTOs.IntegerDTO();
+            integerDTO.Number = (await _context.Patients.Where(p => p.SalonId == Id).ToListAsync()).Count();
+            return integerDTO; 
+        }
+
         public async Task<IEnumerable<Entities.Salon>> GetSalonBySectionAsync(Guid sectionId)
         {
             return await _context.Salons.Where(s => s.SectionId == sectionId).ToListAsync();

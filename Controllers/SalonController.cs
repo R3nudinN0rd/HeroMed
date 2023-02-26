@@ -87,6 +87,19 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<Models.SalonDTO>(salonFromRepo));
         }
 
+        [HttpGet("patients/{id}")]
+        public async Task<ActionResult<int>> GetPatientsFromSalon(Guid id)
+        {
+            if (!_validator.ValidateGuid(id))
+            {
+                return BadRequest();
+            }
+
+            var numberOfPatients = _salonRepository.GetNumberOfPatients(id).GetAwaiter().GetResult();
+
+            return Ok(numberOfPatients);
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddSalon(Models.InsertDTOs.InsertSalonDTO salonDTO)
         {
