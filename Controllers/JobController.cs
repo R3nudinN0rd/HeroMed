@@ -36,7 +36,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<JobDTO>>(jobsFromRepo));
         }
 
-        [HttpGet("/job/{jobId}", Name = "GetJobById")]
+        [HttpGet("job/{jobId}", Name = "GetJobById")]
         public async Task<ActionResult<Models.JobDTO>> GetJobById(Guid jobId)
         {
             if (!_validator.ValidateGuid(jobId))
