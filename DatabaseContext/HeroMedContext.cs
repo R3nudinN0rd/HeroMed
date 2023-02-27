@@ -257,7 +257,7 @@ namespace HeroMed_API.DatabaseContext
                     Id = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
                     FirstName = "Mircea",
                     LastName = "Popa",
-                    BirthDate = new DateTimeOffset(new DateTime(year: 1999, month: 6, day: 13)),
+                    BirthDate = new DateTime(year: 1999, month: 6, day: 13),
                     Address = "Str. Nicolae Balcescu, Nr. 189, Blc. L6, Sc. A, Ap. 20",
                     Email = "mircea.popa@gmail.com",
                     PhoneNumber = "0751234567",
@@ -265,15 +265,15 @@ namespace HeroMed_API.DatabaseContext
                     EmergencyContactPhoneNumber = "0752345678",
                     SalonId = Guid.Parse("46589e47-e79f-417f-9e1a-410dd719f0e8"),
                     IssueDetails = "Some disease details.",
-                    EnrolledDate = new DateTimeOffset(new DateTime(year: 2022, month:11, day:28)),
-                    DischargeDate = new DateTimeOffset(new DateTime(year: 2022, month:12, day: 3))
+                    EnrolledDate = new DateTime(year: 2022, month:11, day:28),
+                    DischargeDate = new DateTime(year: 2022, month:12, day: 3)
                 },
                 new Patient()
                 {
                     Id = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08743"),
                     FirstName = "Radu",
                     LastName = "Voicu",
-                    BirthDate = new DateTimeOffset(new DateTime(year: 1997, month: 3, day: 11)),
+                    BirthDate = new DateTime(year: 1997, month: 3, day: 11),
                     Address = "Str. Nicolae Balcescu, Nr. 1, Blc. L4, Sc. B, Ap. 14",
                     Email = "mircea.popa@gmail.com",
                     PhoneNumber = "0752234567",
@@ -281,15 +281,15 @@ namespace HeroMed_API.DatabaseContext
                     EmergencyContactPhoneNumber = "0752345123",
                     SalonId = Guid.Parse("46589e47-e79f-417f-9e1a-410dd719f0e8"),
                     IssueDetails = "Some disease details. 2",
-                    EnrolledDate = new DateTimeOffset(new DateTime(year: 2022, month: 11, day: 28)),
-                    DischargeDate = new DateTimeOffset(new DateTime(year: 2022, month: 12, day: 3))
+                    EnrolledDate = new DateTime(year: 2022, month: 11, day: 28),
+                    DischargeDate = new DateTime(year: 2022, month: 12, day: 3)
                 },
                 new Patient()
                 {
                     Id = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08744"),
                     FirstName = "Mircea2",
                     LastName = "Popa2",
-                    BirthDate = new DateTimeOffset(new DateTime(year: 2001, month: 6, day: 13)),
+                    BirthDate = new DateTime(year: 2001, month: 6, day: 13),
                     Address = "Str. Nicolae Balcescu, Nr. 189, Blc. L6, Sc. A, Ap. 20",
                     Email = "mircea.popa@gmail.com",
                     PhoneNumber = "0751232222",
@@ -297,8 +297,8 @@ namespace HeroMed_API.DatabaseContext
                     EmergencyContactPhoneNumber = "0758765432",
                     SalonId = Guid.Parse("46589e47-e79f-417f-9e1a-410dd719f0e8"),
                     IssueDetails = "Some disease details.",
-                    EnrolledDate = new DateTimeOffset(new DateTime(year: 2022, month: 11, day: 28)),
-                    DischargeDate = new DateTimeOffset(new DateTime(year: 2022, month: 12, day: 3))
+                    EnrolledDate = new DateTime(year: 2022, month: 11, day: 28),
+                    DischargeDate =new DateTime(year: 2022, month: 12, day: 3)
                 }
                 );
             #endregion
