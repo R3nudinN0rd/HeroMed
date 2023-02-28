@@ -123,8 +123,7 @@ namespace HeroMed_API.DatabaseContext
                         SalaryCurrency = "RON",
                         JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f2"),
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb82"),
-                        SeniorityYears = 4,
-                        DocumentsPath = "X://ToCompute"
+                        SeniorityYears = 4
                     },
                     new Employee()
                     {
@@ -143,8 +142,7 @@ namespace HeroMed_API.DatabaseContext
                         SalaryCurrency = "RON",
                         JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f2"),
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb83"),
-                        SeniorityYears = 22,
-                        DocumentsPath = "X://ToCompute"
+                        SeniorityYears = 22
                     },
                     new Employee()
                     {
@@ -163,8 +161,7 @@ namespace HeroMed_API.DatabaseContext
                         SalaryCurrency = "RON",
                         JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f3"),
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
-                        SeniorityYears = 4,
-                        DocumentsPath = "X://ToCompute"
+                        SeniorityYears = 4
                     },
                     new Employee()
                     {
@@ -183,8 +180,7 @@ namespace HeroMed_API.DatabaseContext
                         SalaryCurrency = "RON",
                         JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f3"),
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
-                        SeniorityYears = 10,
-                        DocumentsPath = "X://ToCompute"
+                        SeniorityYears = 10
                     }
                 );
             #endregion

@@ -56,7 +56,6 @@ namespace HeroMed_API.Entities
         [Required(ErrorMessage = "Years of seniority is a required field!")]
         public int SeniorityYears { get; set; }
 
-        public string? DocumentsPath { get; set; }
 
         public User User { get; set; }
         public ICollection<PatientEmployee> EmployeePatients { get; set; }
