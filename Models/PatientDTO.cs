@@ -8,7 +8,7 @@
         public DateTime Birthdate { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-        public string PhoneNumebr { get; set; }
+        public string PhoneNumeber { get; set; }
         public string EmergencyContactName { get; set; }
         public string EmergencyContactPhoneNumber { get; set; }
         public Guid SalonId { get; set; }
