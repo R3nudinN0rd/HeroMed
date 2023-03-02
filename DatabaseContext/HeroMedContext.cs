@@ -189,8 +189,7 @@ namespace HeroMed_API.DatabaseContext
                     new User()
                     {
                         Id = Guid.Parse("1fdbe311-ac30-4a06-be2c-0fcc779b9246"),
-                        Username = "admin",
-                        Password = "admin",
+                        Email = "email@email.com",
                         CreatedDate = DateTime.Now,
                         Admin = true,
                         EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b600")
@@ -198,8 +197,7 @@ namespace HeroMed_API.DatabaseContext
                     new User()
                     {
                         Id = Guid.Parse("1fdbe311-ac30-4a06-be2c-0fcc779b9247"),
-                        Username = "UnUSername",
-                        Password = "OParola",
+                        Email = "UnUSername@altuser.com",
                         CreatedDate = DateTime.Now,
                         Admin = false,
                         EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b620")
@@ -207,8 +205,7 @@ namespace HeroMed_API.DatabaseContext
                     new User()
                     {
                         Id = Guid.Parse("1fdbe311-ac30-4a06-be2c-0fcc779b9248"),
-                        Username = "AltUSername",
-                        Password = "AltaParola",
+                        Email = "AltUSername@unuser.com",
                         CreatedDate = DateTime.Now,
                         Admin = false,
                         EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b621")

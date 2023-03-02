@@ -14,7 +14,7 @@ namespace HeroMed_API.Controllers
     [ApiController]
     [Route("api/users")]
     [EnableCors("AllowOrigins")]
-    public class UserController:ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ namespace HeroMed_API.Controllers
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
-        [HttpGet,HttpHead]
+        [HttpGet, HttpHead]
         public async Task<ActionResult<IEnumerable<Models.UserDTO>>> GetAllUsers()
         {
             var usersFromRepo = _userRepository.GetAllUsersAsync().GetAwaiter().GetResult();
@@ -60,7 +60,7 @@ namespace HeroMed_API.Controllers
         {
             var usersFromRepo = _userRepository.GetAdminsAsync().GetAwaiter().GetResult();
 
-            if(!_validator.ValidateResult(usersFromRepo))
+            if (!_validator.ValidateResult(usersFromRepo))
             {
                 return NotFound();
             }
@@ -89,7 +89,7 @@ namespace HeroMed_API.Controllers
         public async Task<ActionResult> AddUser(InsertUserDTO userDTO)
         {
             Encryptor crypt = new Encryptor();
-            if(!_validator.ValidateUserToInsert(userDTO))
+            if (!_validator.ValidateUserToInsert(userDTO))
             {
                 return UnprocessableEntity();
             }
@@ -98,44 +98,22 @@ namespace HeroMed_API.Controllers
             user.Id = Guid.NewGuid();
             user.CreatedDate = DateTime.Now;
             user.Admin = false;
-            user.Password = crypt.CreateMD5Hash(user.Password);
             await _userRepository.AddUserAsync(user);
 
             return CreatedAtRoute("GetUserById",
-                                  new {userId = user.Id },
+                                  new { userId = user.Id },
                                   userDTO);
         }
 
-        [HttpPut("userId")]
-        public async Task<ActionResult> UpdateUser(Guid userId, UpdateUserDTO userDTO)
+
+        [HttpDelete("email/{email}")]
+        public async Task<ActionResult> DeleteUser(string email)
         {
-            Encryptor crypt = new Encryptor();
-            if(!_validator.ValidateGuid(userId))
+            if(email == "")
             {
                 return BadRequest();
             }
-
-            if (!_userRepository.UserExists(userId))
-            {
-                return NotFound();
-            }
-
-            var userFromRepo = _userRepository.GetUserByIdAsync(userId).GetAwaiter().GetResult();
-            _mapper.Map(userDTO, userFromRepo);
-            userFromRepo.Password = crypt.CreateMD5Hash(userFromRepo.Password);
-            _userRepository.UpdateUser(userFromRepo);
-
-            return NoContent();
-        }
-
-        [HttpDelete("username/{username}")]
-        public async Task<ActionResult> DeleteUser(string username)
-        {
-            if(username == "")
-            {
-                return BadRequest();
-            }
-            _userRepository.DeleteUserByUsername(username);
+            _userRepository.DeleteUserByEmail(email);
 
             return Ok();
         }

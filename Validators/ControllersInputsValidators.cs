@@ -216,8 +216,7 @@ namespace HeroMed_API.Validators
 
 
 
-            if(user.Username == "" ||
-               user.Password == "")
+            if(user.Email== "")
             {
                 return false;
             }
