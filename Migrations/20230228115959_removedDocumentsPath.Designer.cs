@@ -4,6 +4,7 @@ using HeroMed_API.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HeroMed_API.Migrations
 {
     [DbContext(typeof(HeroMedContext))]
-    partial class HeroMedContextModelSnapshot : ModelSnapshot
+    [Migration("20230228115959_removedDocumentsPath")]
+    partial class removedDocumentsPath
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -531,14 +533,15 @@ namespace HeroMed_API.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("VerificationCode")
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -553,25 +556,28 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9246"),
                             Admin = true,
-                            CreatedDate = new DateTime(2023, 3, 2, 16, 13, 49, 487, DateTimeKind.Local).AddTicks(8117),
-                            Email = "email@email.com",
-                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b600")
+                            CreatedDate = new DateTime(2023, 2, 28, 13, 59, 58, 601, DateTimeKind.Local).AddTicks(8462),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b600"),
+                            Password = "admin",
+                            Username = "admin"
                         },
                         new
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9247"),
                             Admin = false,
-                            CreatedDate = new DateTime(2023, 3, 2, 16, 13, 49, 487, DateTimeKind.Local).AddTicks(8159),
-                            Email = "UnUSername@altuser.com",
-                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620")
+                            CreatedDate = new DateTime(2023, 2, 28, 13, 59, 58, 601, DateTimeKind.Local).AddTicks(8509),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620"),
+                            Password = "OParola",
+                            Username = "UnUSername"
                         },
                         new
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9248"),
                             Admin = false,
-                            CreatedDate = new DateTime(2023, 3, 2, 16, 13, 49, 487, DateTimeKind.Local).AddTicks(8163),
-                            Email = "AltUSername@unuser.com",
-                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621")
+                            CreatedDate = new DateTime(2023, 2, 28, 13, 59, 58, 601, DateTimeKind.Local).AddTicks(8512),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621"),
+                            Password = "AltaParola",
+                            Username = "AltUSername"
                         });
                 });
 

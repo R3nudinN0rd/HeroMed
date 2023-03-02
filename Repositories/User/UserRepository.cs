@@ -37,11 +37,11 @@ namespace HeroMed_API.Repositories.User
             }
         }
 
-        public void DeleteUserByUsername(string username)
+        public void DeleteUserByEmail(string email)
         {
             try
             {
-                var user = _context.Users.FirstOrDefault<Entities.User>(user => user.Username == username) ;
+                var user = _context.Users.FirstOrDefault<Entities.User>(user => user.Email == email) ;
                 if(user == null)
                 {
                     throw new ArgumentNullException(nameof(user));
@@ -83,9 +83,19 @@ namespace HeroMed_API.Repositories.User
             return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.EmployeeId == emplId);
         }
 
-        public async Task<Entities.User> GetUserByUsernameAsync(string username)
+        public async Task<Entities.User> GetUserForVerification(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Username == username);
+            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Email == email);
+        }
+
+        public async Task<Entities.User> GetUserForVerification(string email, string code)
+        {
+            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Email == email && user.VerificationCode == code);
+        } 
+
+        public async Task<Entities.User> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Email == email);
         }
 
         public async Task<Entities.User> GetUserByIdAsync(Guid userId)

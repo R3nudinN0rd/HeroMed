@@ -10,11 +10,9 @@ namespace HeroMed_API.Entities
         [Key]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Username is a required field!")]
-        public string Username { get; set; }
-
-        [Required(ErrorMessage = "Password is a required field!"), PasswordPropertyText]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "Email is a required field!")]
+        public string Email { get; set; }
+        public string? VerificationCode { get; set; }
 
         [Required(ErrorMessage = "Created date is a required field!")]
         public DateTime CreatedDate { get; set; }

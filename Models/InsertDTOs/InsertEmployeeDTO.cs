@@ -35,7 +35,5 @@ namespace HeroMed_API.Models.InsertDTOs
 
         public int SeniorityYears { get; set; }
 
-        public string? DocumentsPath { get; set; }
-
     }
 }

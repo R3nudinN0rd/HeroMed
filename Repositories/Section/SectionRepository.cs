@@ -58,5 +58,20 @@ namespace HeroMed_API.Repositories.Section
                 throw ex;
             }
         }
+
+        public void DeleteSection(Guid id)
+        {
+            try
+            {
+                var section = _context.Sections.FirstOrDefault(s => s.Id == id);
+                if (section == null) throw new ArgumentNullException(nameof(section));
+                _context.Sections.Remove(section);
+                _context.SaveChanges();
+            }
+            catch(SqlException ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -6,8 +6,8 @@ namespace HeroMed_API.Models.InsertDTOs
 {
     public class InsertUserDTO
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Email { get; set; }
+        public string VerificationCode { get; set; }
         public Guid EmployeeId { get; set; }
     }
 }

@@ -17,10 +17,12 @@ namespace HeroMed_API.Entities
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Birthdate is a required field!")]
-        public DateTimeOffset Birthdate { get; set; }
+        [Column(TypeName =("datetime"))]
+        public DateTime Birthdate { get; set; }
 
         [Required(ErrorMessage = "Employment date is a required field!")]
-        public DateTimeOffset EmploymentDate { get; set; }
+        [Column(TypeName = ("datetime"))]
+        public DateTime EmploymentDate { get; set; }
 
         [Required(ErrorMessage = "Place of birth is a required field!")]
         public string PlaceOfBirth { get; set; }
@@ -54,7 +56,6 @@ namespace HeroMed_API.Entities
         [Required(ErrorMessage = "Years of seniority is a required field!")]
         public int SeniorityYears { get; set; }
 
-        public string? DocumentsPath { get; set; }
 
         public User User { get; set; }
         public ICollection<PatientEmployee> EmployeePatients { get; set; }

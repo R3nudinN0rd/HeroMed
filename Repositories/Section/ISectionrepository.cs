@@ -8,6 +8,7 @@ namespace HeroMed_API.Repositories.Section
         Task<Entities.Section> GetSectionByIdAsync(Guid id);
         Task<Entities.Section> AddSectionAsync(Entities.Section section);
         void UpdateSection(Entities.Section section);
+        void DeleteSection(Guid id);
         bool SectionExists(Guid sectionId);
     }
 }

@@ -4,6 +4,7 @@ using HeroMed_API.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HeroMed_API.Migrations
 {
     [DbContext(typeof(HeroMedContext))]
-    partial class HeroMedContextModelSnapshot : ModelSnapshot
+    [Migration("20230227142124_ChangedDateToDateTime")]
+    partial class ChangedDateToDateTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +36,9 @@ namespace HeroMed_API.Migrations
 
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("DocumentsPath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -95,6 +100,7 @@ namespace HeroMed_API.Migrations
                             Id = new Guid("0b273992-95bd-4baf-b298-92355f67b620"),
                             Address = "Arges, Pitesti, Strada Mioarei Nr1",
                             Birthdate = new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DocumentsPath = "X://ToCompute",
                             Email = "unemail@gmail.com",
                             EmploymentDate = new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Mihai",
@@ -114,6 +120,7 @@ namespace HeroMed_API.Migrations
                             Id = new Guid("0b273992-95bd-4baf-b298-92355f67b621"),
                             Address = "Arges, Pitesti, Strada Mioarei Nr1",
                             Birthdate = new DateTime(1968, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DocumentsPath = "X://ToCompute",
                             Email = "altemail@gmail.com",
                             EmploymentDate = new DateTime(2000, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "George",
@@ -133,6 +140,7 @@ namespace HeroMed_API.Migrations
                             Id = new Guid("0b273992-95bd-4baf-b298-92355f67b622"),
                             Address = "Arges, Pitesti, Strada Mioarei Nr1",
                             Birthdate = new DateTime(1978, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DocumentsPath = "X://ToCompute",
                             Email = "unemail@gmail.com",
                             EmploymentDate = new DateTime(2007, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Mihai",
@@ -152,6 +160,7 @@ namespace HeroMed_API.Migrations
                             Id = new Guid("0b273992-95bd-4baf-b298-92355f67b600"),
                             Address = " ",
                             Birthdate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DocumentsPath = "X://ToCompute",
                             Email = "remusene69@gmail.com",
                             EmploymentDate = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "admin",
@@ -531,14 +540,15 @@ namespace HeroMed_API.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("VerificationCode")
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -553,25 +563,28 @@ namespace HeroMed_API.Migrations
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9246"),
                             Admin = true,
-                            CreatedDate = new DateTime(2023, 3, 2, 16, 13, 49, 487, DateTimeKind.Local).AddTicks(8117),
-                            Email = "email@email.com",
-                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b600")
+                            CreatedDate = new DateTime(2023, 2, 27, 16, 21, 24, 102, DateTimeKind.Local).AddTicks(3663),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b600"),
+                            Password = "admin",
+                            Username = "admin"
                         },
                         new
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9247"),
                             Admin = false,
-                            CreatedDate = new DateTime(2023, 3, 2, 16, 13, 49, 487, DateTimeKind.Local).AddTicks(8159),
-                            Email = "UnUSername@altuser.com",
-                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620")
+                            CreatedDate = new DateTime(2023, 2, 27, 16, 21, 24, 102, DateTimeKind.Local).AddTicks(3708),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b620"),
+                            Password = "OParola",
+                            Username = "UnUSername"
                         },
                         new
                         {
                             Id = new Guid("1fdbe311-ac30-4a06-be2c-0fcc779b9248"),
                             Admin = false,
-                            CreatedDate = new DateTime(2023, 3, 2, 16, 13, 49, 487, DateTimeKind.Local).AddTicks(8163),
-                            Email = "AltUSername@unuser.com",
-                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621")
+                            CreatedDate = new DateTime(2023, 2, 27, 16, 21, 24, 102, DateTimeKind.Local).AddTicks(3711),
+                            EmployeeId = new Guid("0b273992-95bd-4baf-b298-92355f67b621"),
+                            Password = "AltaParola",
+                            Username = "AltUSername"
                         });
                 });
 

@@ -17,7 +17,7 @@ namespace HeroMed_API.Entities
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Date of birth is a required field!")]
-        public DateTimeOffset BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         [Required(ErrorMessage = "Address is a required field!")]
         public string Address { get; set; }
@@ -42,10 +42,10 @@ namespace HeroMed_API.Entities
         public string IssueDetails { get; set; }
 
         [Required(ErrorMessage = "Enroled date is a required field!")]
-        public DateTimeOffset EnrolledDate { get; set; }
+        public DateTime EnrolledDate { get; set; }
 
         [Required(ErrorMessage = "Discharge date is a required field!")]
-        public DateTimeOffset DischargeDate { get; set; }
+        public DateTime DischargeDate { get; set; }
         public ICollection<PatientEmployee> PatientEmployees { get; set; }
     }
 }
