@@ -48,7 +48,7 @@ namespace HeroMed_API.Controllers
 
             return Ok(_mapper.Map<EmployeeDTO>(employeeFromRepo));
         }
-        [HttpGet("/emailEmployee/{email}",Name = "GetEmployeeByEmail")]
+        [HttpGet("emailEmployee/{email}",Name = "GetEmployeeByEmail")]
         public async Task<ActionResult<Models.EmployeeDTO>> GetEmployeeByEmail(string email)
         {
             if (!_validators.ValidateString(email))

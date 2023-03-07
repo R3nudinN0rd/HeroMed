@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using HeroMed_API.Repositories.User;
+using HeroMed_API.TransferService.SMTP.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using TransferServices.SMTP;
-using TransferServices.SMTP.Repository;
+using TransferServices.OAuth2Email.Entities;
+using TransferServices.OAuth2Email.Repository;
 
 namespace HeroMed_API.Controllers.SMTP
 {
@@ -31,19 +32,19 @@ namespace HeroMed_API.Controllers.SMTP
         }
 
         [HttpPost("verification/send")]
-        public ActionResult SendVerificationEmail(string email)
+        public ActionResult SendVerificationEmail(PostEmailPayload email)
         {
-           var userFromRepo = _userRepository.GetUserForVerification(email).GetAwaiter().GetResult();
+           var userFromRepo = _userRepository.GetUserForVerification(email.Email).GetAwaiter().GetResult();
 
             if (userFromRepo == null)
             {
                 return NoContent();
             }
-            string code = _emailSenderRepository.SendVerificationEmail(email);
+            string code = _emailSenderRepository.SendVerificationEmail(email.Email);
 
             userFromRepo.VerificationCode = code;
             _userRepository.UpdateUser(userFromRepo);
-           return Ok();
+            return NoContent();
         }
 
         [HttpGet("verification")]
@@ -60,7 +61,6 @@ namespace HeroMed_API.Controllers.SMTP
             }
             userFromRepo.VerificationCode = "";
             _userRepository.UpdateUser(userFromRepo);
-
             return Ok(_mapper.Map<Models.UserDTO>(userFromRepo));
         }
 
