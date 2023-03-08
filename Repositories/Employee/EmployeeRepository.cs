@@ -50,10 +50,12 @@ namespace HeroMed_API.Repositories.Employee
 
         public async Task<IEnumerable<Entities.Employee>> GetAllEmployeesAsync()
         {
-            var entity = await _context.Employees.ToListAsync();
-            return entity;
+            return await _context.Employees.ToListAsync();
         }
-
+        public async Task<IEnumerable<Entities.Employee>> GetEmployeesBySectionIdAsync(Guid sectionId)
+        {
+            return await _context.Employees.Where(e => e.SectionId == sectionId).ToListAsync();
+        }
         public async Task<Entities.Employee> GetEmployeeByEmailAsync(string email)
         {
             return await _context.Employees.FirstOrDefaultAsync<Entities.Employee>(e => e.Email == email);

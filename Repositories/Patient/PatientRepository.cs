@@ -83,5 +83,23 @@ namespace HeroMed_API.Repositories.Patient
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<Entities.Patient>> GetPatientsBySectionIdAsync(Guid sectionId)
+        {
+            List<Entities.Patient> patients = new List<Entities.Patient>();
+            var salon = await _context.Salons.Where(s => s.SectionId== sectionId).ToListAsync();
+
+            foreach(var s in salon)
+            {
+                var patientsSalon = await _context.Patients.Where(p => p.SalonId == s.Id).ToListAsync();
+                
+                foreach(var p in patientsSalon)
+                {
+                    patients.Add(p);
+                }
+            }
+
+            return patients;
+        }
     }
 }

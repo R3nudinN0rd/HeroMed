@@ -56,6 +56,24 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<PatientDTO>(patientFromRepo));
         }
 
+        [HttpGet("section/{sectionId}")]
+        public async Task<ActionResult<Models.PatientDTO>> GetPatientBySectionId(Guid sectionId)
+        {
+            if (!_validator.ValidateGuid(sectionId))
+            {
+                return BadRequest();
+            }
+
+            var patientsFromRepo = _patientRepository.GetPatientsBySectionIdAsync(sectionId).GetAwaiter().GetResult();
+
+            if (!_validator.ValidateResult(patientsFromRepo))
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<PatientDTO>>(patientsFromRepo));
+        }
+
         [HttpGet("email/{email}")]
         public ActionResult<Models.PatientDTO> GetPatientByEmail(string email)
         {

@@ -48,6 +48,24 @@ namespace HeroMed_API.Controllers
 
             return Ok(_mapper.Map<EmployeeDTO>(employeeFromRepo));
         }
+
+        [HttpGet("section/{sectionId}")]
+        public async Task<ActionResult<Models.EmployeeDTO>> GetEmployeesBySectionId(Guid sectionId) 
+        {
+            if (!_validators.ValidateGuid(sectionId))
+            {
+                return BadRequest();
+            }
+            var employeesFromRepo = _employeeRepository.GetEmployeesBySectionIdAsync(sectionId).GetAwaiter().GetResult();
+
+            if (!_validators.ValidateResult(employeesFromRepo))
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<IEnumerable<EmployeeDTO>>(employeesFromRepo));
+        }
+
+
         [HttpGet("emailEmployee/{email}",Name = "GetEmployeeByEmail")]
         public async Task<ActionResult<Models.EmployeeDTO>> GetEmployeeByEmail(string email)
         {

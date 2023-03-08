@@ -38,7 +38,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.SalonDTO>>(salonsFromRepo));
         }
 
-        [HttpGet("/salon/{sectionId}")]
+        [HttpGet("section/{sectionId}")]
         public async Task<ActionResult<IEnumerable<Models.SalonDTO>>> GetSalonsBySectionId(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))
@@ -56,7 +56,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.SalonDTO>>(salonsFromRepo));
         }
 
-        [HttpGet("/salon/available")]
+        [HttpGet("available")]
         public async Task<ActionResult<IEnumerable<Models.SalonDTO>>> GetAvailableSalons()
         {
             var salonsFromRepo = _salonRepository.GetAvailableSalonsAsync().GetAwaiter().GetResult();
