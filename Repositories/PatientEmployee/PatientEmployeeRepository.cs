@@ -1,4 +1,7 @@
 ﻿using HeroMed_API.DatabaseContext;
+using HeroMed_API.Entities;
+using HeroMed_API.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -76,19 +79,80 @@ namespace HeroMed_API.Repositories.PatientEmployee
             return await _context.PatientEmployee.FirstOrDefaultAsync(r => r.EmployeeId == employeeId && r.PatientId == patientId);
         }
 
-        public void UpdateRelation(Entities.RelationsEntity.PatientEmployee employeePatientRelation)
+        public void UpdateRelation(Entities.RelationsEntity.PatientEmployee employeePatientRelation, Entities.RelationsEntity.PatientEmployee relationDTO)
         {
             try
             {
                 _context.PatientEmployee.Remove(employeePatientRelation);
-                _context.SaveChanges();
-                _context.PatientEmployee.Add(employeePatientRelation);
+                _context.PatientEmployee.Add(relationDTO);
                 _context.SaveChanges();
             }
             catch (SqlException ex)
             {
                 throw ex;
             }
+        }
+
+        public IEnumerable<Entities.RelationsEntity.PatientEmployee> GetPatientExternalValuesAsync(Guid employeeId)
+        {
+            List<Entities.RelationsEntity.PatientEmployee> relations = new List<Entities.RelationsEntity.PatientEmployee>();
+            var currentIds = _context.PatientEmployee.Where(r => r.EmployeeId == employeeId).ToList();
+            var employeesIds = _context.Patients.ToList();
+
+            foreach (var emplId in employeesIds)
+            {
+                bool found = false;
+                foreach (var id in currentIds)
+                {
+                    if (emplId.Id == id.EmployeeId)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found == false)
+                {
+                    relations.Add(
+                        new Entities.RelationsEntity.PatientEmployee
+                        {
+                            PatientId = emplId.Id,
+                            EmployeeId = employeeId
+                        });
+                }
+            }
+
+            return relations;
+        }
+
+        public IEnumerable<Entities.RelationsEntity.PatientEmployee> GetEmployeeExternalValuesAsync(Guid patientId)
+        {
+            List<Entities.RelationsEntity.PatientEmployee> relations = new List<Entities.RelationsEntity.PatientEmployee>();
+            var currentIds = _context.PatientEmployee.Where(r => r.PatientId == patientId).ToList();          
+            var employeesIds = _context.Employees.ToList();
+            foreach(var emplId in employeesIds)
+            {
+                bool found = false;
+                foreach(var id in currentIds)
+                {
+                    if (emplId.Id == id.EmployeeId)
+                    {
+                        found= true;
+                        break;
+                    }
+                }
+
+                if(found == false)
+                {
+                    relations.Add(
+                        new Entities.RelationsEntity.PatientEmployee
+                        {
+                            PatientId = patientId,
+                            EmployeeId = emplId.Id
+                        });
+                }
+            }
+            return relations;
         }
     }
 }

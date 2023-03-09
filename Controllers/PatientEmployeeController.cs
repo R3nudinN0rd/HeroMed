@@ -2,12 +2,14 @@
 using HeroMed_API.Entities.RelationsEntity;
 using HeroMed_API.Repositories.PatientEmployee;
 using HeroMed_API.Validators;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
     [ApiController]
     [Route("/api/relation")]
+    [EnableCors("AllowOrigins")]
     public class PatientEmployeeController:ControllerBase
     {
         private readonly IPatientEmployeeRepository _patientEmployeeRepository;
@@ -31,7 +33,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
         }
 
-        [HttpGet("/relationP/{patientId}")]
+        [HttpGet("relationP/{patientId}")]
         public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetRelationsByPatientId(Guid patientId)
         {
             if (!_validator.ValidateGuid(patientId))
@@ -49,7 +51,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
         }
 
-        [HttpGet("/relationE/{employeeId}")]
+        [HttpGet("relationE/{employeeId}")]
         public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetRelationsByEmployeeId(Guid employeeId)
         {
             if (!_validator.ValidateGuid(employeeId))
@@ -67,8 +69,8 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
         }
 
-        [HttpGet("/relation/{employeeId}/{patientId}", Name = "GetRelationByKey")]
-        public ActionResult<Models.PatientEmployeeDTO> GetSpecificRelation(Guid patientId, Guid employeeId)
+        [HttpGet("relation/{employeeId}/{patientId}", Name = "GetRelationByKey")]
+        public async Task<ActionResult<Models.PatientEmployeeDTO>> GetSpecificRelation(Guid patientId, Guid employeeId)
         {
             if(!_validator.ValidateGuid(patientId) || !_validator.ValidateGuid(employeeId))
             {
@@ -84,6 +86,43 @@ namespace HeroMed_API.Controllers
 
             return Ok(_mapper.Map<Models.PatientEmployeeDTO>(relationFromRepo));
         }
+        [HttpGet("relation/external/patient/{patientId}")]
+        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetPatientExternalValues(Guid patientId)
+        {
+            if (!_validator.ValidateGuid(patientId))
+            {
+                return BadRequest();
+            }
+
+            var relationsFromRepo = _patientEmployeeRepository.GetPatientExternalValuesAsync(patientId);
+
+            if (!_validator.ValidateResult(relationsFromRepo))
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
+        }
+
+        [HttpGet("relation/external/employee/{employeeId}")]
+        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetEmployeeExternalValues(Guid employeeId)
+        {
+            if (!_validator.ValidateGuid(employeeId))
+            {
+                return BadRequest();
+            }
+
+            var relationsFromRepo = _patientEmployeeRepository.GetEmployeeExternalValuesAsync(employeeId);
+
+            if (!_validator.ValidateResult(relationsFromRepo))
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
+        }
+
+
 
         [HttpPost]
         public async Task<ActionResult> AddRelation(Models.PatientEmployeeDTO relationDTO)
@@ -119,8 +158,8 @@ namespace HeroMed_API.Controllers
             }
 
             var relationFromRepo = _patientEmployeeRepository.GetRelationAsync(employeeId, patientId).GetAwaiter().GetResult();
-            _mapper.Map(relationDTO, relationFromRepo);
-            _patientEmployeeRepository.UpdateRelation(relationFromRepo);
+            var x = _mapper.Map<PatientEmployee>(relationDTO);
+            _patientEmployeeRepository.UpdateRelation(relationFromRepo, x);
 
             return NoContent();
         }
