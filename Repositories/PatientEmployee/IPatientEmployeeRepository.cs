@@ -13,6 +13,8 @@ namespace HeroMed_API.Repositories.PatientEmployee
         IEnumerable<Entities.RelationsEntity.PatientEmployee> GetPatientExternalValuesAsync(Guid patientId);
         void UpdateRelation(Entities.RelationsEntity.PatientEmployee employeePatientRelation, Entities.RelationsEntity.PatientEmployee relationDTO);
         void DeleteRelation(Guid employeeId, Guid patientId);
+        void DeleteRelationByPatientId(Guid patientId);
+        void DeleteRelationByEmployeeId(Guid employeeId);
         bool RelationExists(Guid employeeId, Guid patientId);
     }
 }

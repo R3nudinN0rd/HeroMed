@@ -92,19 +92,18 @@ namespace HeroMed_API.Repositories.PatientEmployee
                 throw ex;
             }
         }
-
         public IEnumerable<Entities.RelationsEntity.PatientEmployee> GetPatientExternalValuesAsync(Guid employeeId)
         {
             List<Entities.RelationsEntity.PatientEmployee> relations = new List<Entities.RelationsEntity.PatientEmployee>();
             var currentIds = _context.PatientEmployee.Where(r => r.EmployeeId == employeeId).ToList();
-            var employeesIds = _context.Patients.ToList();
+            var patients = _context.Patients.ToList();
 
-            foreach (var emplId in employeesIds)
+            foreach (var patId in patients)
             {
                 bool found = false;
                 foreach (var id in currentIds)
                 {
-                    if (emplId.Id == id.EmployeeId)
+                    if (patId.Id == id.PatientId)
                     {
                         found = true;
                         break;
@@ -116,7 +115,7 @@ namespace HeroMed_API.Repositories.PatientEmployee
                     relations.Add(
                         new Entities.RelationsEntity.PatientEmployee
                         {
-                            PatientId = emplId.Id,
+                            PatientId = patId.Id,
                             EmployeeId = employeeId
                         });
                 }
@@ -129,8 +128,9 @@ namespace HeroMed_API.Repositories.PatientEmployee
         {
             List<Entities.RelationsEntity.PatientEmployee> relations = new List<Entities.RelationsEntity.PatientEmployee>();
             var currentIds = _context.PatientEmployee.Where(r => r.PatientId == patientId).ToList();          
-            var employeesIds = _context.Employees.ToList();
-            foreach(var emplId in employeesIds)
+            var employees = _context.Employees.ToList();
+            
+            foreach(var emplId in employees)
             {
                 bool found = false;
                 foreach(var id in currentIds)
@@ -154,5 +154,44 @@ namespace HeroMed_API.Repositories.PatientEmployee
             }
             return relations;
         }
+
+        public void DeleteRelationByPatientId(Guid patientId)
+        {
+            try
+            {
+                var relations = _context.PatientEmployee.Where(r => r.PatientId == patientId);
+                foreach (var relation in relations)
+                {
+                    _context.PatientEmployee.Remove(relation);  
+                }
+                _context.SaveChanges();
+            }
+
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
+  
+
+        public void DeleteRelationByEmployeeId(Guid employeeId)
+        {
+        try
+        {
+            var relations = _context.PatientEmployee.Where(r => r.PatientId == employeeId);
+            foreach (var relation in relations)
+            {
+                _context.PatientEmployee.Remove(relation);
+            }
+
+            _context.SaveChanges();
+            
+        }
+
+        catch (SqlException ex)
+        {
+            throw ex;
+        }
     }
 }
+    }

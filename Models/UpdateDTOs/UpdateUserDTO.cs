@@ -2,6 +2,7 @@
 {
     public class UpdateUserDTO
     {
+        public bool Admin { get; set; }
         public string VerificationCode { get; set; }
     }
 }

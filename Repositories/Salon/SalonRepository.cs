@@ -83,6 +83,9 @@ namespace HeroMed_API.Repositories.Salon
             {
                 var salon = _context.Salons.FirstOrDefault(s => s.Id == id);
                 if (salon == null) throw new ArgumentNullException(nameof(salon));
+                
+                DeletePatientRelations(id);
+
                 _context.Salons.Remove(salon);
                 _context.SaveChanges();
             }
@@ -90,6 +93,22 @@ namespace HeroMed_API.Repositories.Salon
             {
                 throw ex;
             }
+        }
+
+        private void DeletePatientRelations(Guid salonId)
+        {
+            var patients = _context.Patients.Where(p => p.SalonId == salonId).ToList();
+
+            foreach (var patient in patients)
+            {
+                var relations = _context.PatientEmployee.Where(r => r.PatientId == patient.Id).ToList();
+                foreach (var relation in relations)
+                {
+                    _context.Remove(relation);
+                }
+            }
+
+            _context.SaveChanges();
         }
     }
 }

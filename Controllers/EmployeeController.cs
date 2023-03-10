@@ -76,7 +76,6 @@ namespace HeroMed_API.Controllers
             var employeeFromRepo = _employeeRepository.GetEmployeeByEmailAsync(email).GetAwaiter().GetResult();
             
             if(!_validators.ValidateResult(employeeFromRepo))
-            if(!_validators.ValidateResult(employeeFromRepo))
             {
                 return NotFound();
             }
@@ -84,6 +83,19 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<Employee>(employeeFromRepo));
 
         }
+
+        [HttpGet("noaccountemployees")]
+        public async Task<ActionResult<IEnumerable<Models.EmployeeDTO>>> GetEmployeesWithoutAccount()
+        {
+            var employeesFromRepo = _employeeRepository.GetEmployeesWithoutAccount().GetAwaiter().GetResult();
+            if (!_validators.ValidateResult(employeesFromRepo))
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<Employee>>(employeesFromRepo));
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> CreateEmployee(InsertEmployeeDTO employeeDTO)

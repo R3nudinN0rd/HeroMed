@@ -105,6 +105,20 @@ namespace HeroMed_API.Controllers
                                   userDTO);
         }
 
+        [HttpPut("{userId}")]
+        public async Task<ActionResult> UpdateUser(Guid userId, UpdateUserDTO userDTO)
+        {
+            if (!_validator.ValidateGuid(userId))
+            {
+                return BadRequest();
+            }
+
+            var userFromRepo = _userRepository.GetUserByIdAsync(userId).GetAwaiter().GetResult();
+            _mapper.Map(userDTO, userFromRepo);
+
+            _userRepository.UpdateUser(userFromRepo);
+            return NoContent();
+        }
 
         [HttpDelete("email/{email}")]
         public async Task<ActionResult> DeleteUser(string email)

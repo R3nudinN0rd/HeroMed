@@ -86,15 +86,15 @@ namespace HeroMed_API.Controllers
 
             return Ok(_mapper.Map<Models.PatientEmployeeDTO>(relationFromRepo));
         }
-        [HttpGet("relation/external/patient/{patientId}")]
-        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetPatientExternalValues(Guid patientId)
+        [HttpGet("relation/external/patient/{employeeId}")]
+        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetPatientExternalValues(Guid employeeId)
         {
-            if (!_validator.ValidateGuid(patientId))
+            if (!_validator.ValidateGuid(employeeId))
             {
                 return BadRequest();
             }
 
-            var relationsFromRepo = _patientEmployeeRepository.GetPatientExternalValuesAsync(patientId);
+            var relationsFromRepo = _patientEmployeeRepository.GetPatientExternalValuesAsync(employeeId);
 
             if (!_validator.ValidateResult(relationsFromRepo))
             {
@@ -104,15 +104,15 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.PatientEmployeeDTO>>(relationsFromRepo));
         }
 
-        [HttpGet("relation/external/employee/{employeeId}")]
-        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetEmployeeExternalValues(Guid employeeId)
+        [HttpGet("relation/external/employee/{patientId}")]
+        public async Task<ActionResult<IEnumerable<Models.PatientEmployeeDTO>>> GetEmployeeExternalValues(Guid patientId)
         {
-            if (!_validator.ValidateGuid(employeeId))
+            if (!_validator.ValidateGuid(patientId))
             {
                 return BadRequest();
             }
 
-            var relationsFromRepo = _patientEmployeeRepository.GetEmployeeExternalValuesAsync(employeeId);
+            var relationsFromRepo = _patientEmployeeRepository.GetEmployeeExternalValuesAsync(patientId);
 
             if (!_validator.ValidateResult(relationsFromRepo))
             {
@@ -173,6 +173,32 @@ namespace HeroMed_API.Controllers
             }
 
             _patientEmployeeRepository.DeleteRelation(employeeId, patientId);
+
+            return Ok();
+        }
+
+        [HttpDelete("patient/id/{patientId}")]
+        public async Task<ActionResult> DeleteRelataionByPatientId(Guid patientId)
+        {
+            if (!_validator.ValidateGuid(patientId))
+            {
+                return BadRequest();
+            }
+
+            _patientEmployeeRepository.DeleteRelationByPatientId(patientId);
+
+            return Ok();
+        }
+
+        [HttpDelete("employee/id/{employeeId}")]
+        public async Task<ActionResult> DeleteRelationByEmployeeId(Guid employeeId)
+        {
+            if (!_validator.ValidateGuid(employeeId))
+            {
+                return BadRequest();
+            }
+
+            _patientEmployeeRepository.DeleteRelationByEmployeeId(employeeId);
 
             return Ok();
         }

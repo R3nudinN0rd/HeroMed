@@ -1,5 +1,6 @@
 ﻿using HeroMed_API.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Data.SqlClient;
 using System.Runtime.Remoting;
 
@@ -65,6 +66,34 @@ namespace HeroMed_API.Repositories.Employee
         {
             return await _context.Employees.FirstOrDefaultAsync<Entities.Employee>(e => e.Id == id);
         }
+
+        public async Task<IEnumerable<Entities.Employee>> GetEmployeesWithoutAccount()
+        {
+            var employees = await _context.Employees.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+
+            List<Entities.Employee> results = new List<Entities.Employee>();
+
+            foreach(var employee in employees)
+            {
+                bool found = false;
+                foreach(var user in users)
+                {
+                    if(employee.Id == user.EmployeeId)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if(found == false)
+                {
+                    results.Add(employee);
+                }
+            }
+
+            return results;
+        }
+
 
         public void UpdateEmployee(Entities.Employee employee)
         {
