@@ -85,6 +85,18 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<Models.UserDTO>(userFromRepo));
         }
 
+        [HttpGet("email/{userEmail}")]
+        public async Task<ActionResult<Models.UserDTO>> GetUserByEmail(string userEmail)
+        {
+            var userFromRepo = _userRepository.GetUserByEmailAsync(userEmail).GetAwaiter().GetResult();
+            if (!_validator.ValidateResult(userFromRepo))
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<Models.UserDTO>(userFromRepo));
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddUser(InsertUserDTO userDTO)
         {

@@ -96,6 +96,20 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Employee>>(employeesFromRepo));
         }
 
+        [HttpGet("alreadyTakeEmailAddress/{emailAddress}")]
+        public async Task<ActionResult<bool>> GetExistenceOfEmail(string emailAddress)
+        {
+            var employeesFromRepo = _employeeRepository.GetEmployeesWithoutAccount().GetAwaiter().GetResult();
+            if (!_validators.ValidateResult(employeesFromRepo))
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> CreateEmployee(InsertEmployeeDTO employeeDTO)
@@ -104,7 +118,13 @@ namespace HeroMed_API.Controllers
            {
                return UnprocessableEntity();
            }
-           var employee = _mapper.Map<Employee>(employeeDTO);
+            var verifyEmail = _employeeRepository.GetEmployeeByEmailAsync(employeeDTO.Email).GetAwaiter().GetResult();
+            if(verifyEmail!= null)
+            {
+                return NoContent();
+            }
+
+            var employee = _mapper.Map<Employee>(employeeDTO);
             employee.Id = Guid.NewGuid();
             await _employeeRepository.AddEmployeeAsync(employee);
             return CreatedAtRoute("GetEmployeeById",
