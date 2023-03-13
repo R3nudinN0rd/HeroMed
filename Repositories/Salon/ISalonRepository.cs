@@ -6,7 +6,10 @@
         Task<IEnumerable<Entities.Salon>> GetSalonBySectionAsync(Guid sectionId);
         Task<IEnumerable<Entities.Salon>> GetAvailableSalonsAsync();
         Task<Entities.Salon> GetSalonByIdAsync(Guid Id);
+        Task<Entities.Salon> AddSalonAsync(Entities.Salon salon);
+        Task<Models.SingleValueDTOs.IntegerDTO> GetNumberOfPatients(Guid id);
         void UpdateSalon(Entities.Salon salon);
+        void DeleteSalon(Guid Id);
         bool SalonExists(Guid salonID);
     }
 }

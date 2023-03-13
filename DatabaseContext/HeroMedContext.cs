@@ -123,8 +123,7 @@ namespace HeroMed_API.DatabaseContext
                         SalaryCurrency = "RON",
                         JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f2"),
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb82"),
-                        SeniorityYears = 4,
-                        DocumentsPath = "X://ToCompute"
+                        SeniorityYears = 4
                     },
                     new Employee()
                     {
@@ -143,8 +142,7 @@ namespace HeroMed_API.DatabaseContext
                         SalaryCurrency = "RON",
                         JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f2"),
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb83"),
-                        SeniorityYears = 22,
-                        DocumentsPath = "X://ToCompute"
+                        SeniorityYears = 22
                     },
                     new Employee()
                     {
@@ -163,8 +161,7 @@ namespace HeroMed_API.DatabaseContext
                         SalaryCurrency = "RON",
                         JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f3"),
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
-                        SeniorityYears = 4,
-                        DocumentsPath = "X://ToCompute"
+                        SeniorityYears = 4
                     },
                     new Employee()
                     {
@@ -183,8 +180,7 @@ namespace HeroMed_API.DatabaseContext
                         SalaryCurrency = "RON",
                         JobId = Guid.Parse("cdb98091-c8c1-4774-9612-57c4e6fb81f3"),
                         SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb84"),
-                        SeniorityYears = 10,
-                        DocumentsPath = "X://ToCompute"
+                        SeniorityYears = 10
                     }
                 );
             #endregion
@@ -193,8 +189,7 @@ namespace HeroMed_API.DatabaseContext
                     new User()
                     {
                         Id = Guid.Parse("1fdbe311-ac30-4a06-be2c-0fcc779b9246"),
-                        Username = "admin",
-                        Password = "admin",
+                        Email = "email@email.com",
                         CreatedDate = DateTime.Now,
                         Admin = true,
                         EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b600")
@@ -202,8 +197,7 @@ namespace HeroMed_API.DatabaseContext
                     new User()
                     {
                         Id = Guid.Parse("1fdbe311-ac30-4a06-be2c-0fcc779b9247"),
-                        Username = "UnUSername",
-                        Password = "OParola",
+                        Email = "UnUSername@altuser.com",
                         CreatedDate = DateTime.Now,
                         Admin = false,
                         EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b620")
@@ -211,8 +205,7 @@ namespace HeroMed_API.DatabaseContext
                     new User()
                     {
                         Id = Guid.Parse("1fdbe311-ac30-4a06-be2c-0fcc779b9248"),
-                        Username = "AltUSername",
-                        Password = "AltaParola",
+                        Email = "AltUSername@unuser.com",
                         CreatedDate = DateTime.Now,
                         Admin = false,
                         EmployeeId = Guid.Parse("0b273992-95bd-4baf-b298-92355f67b621")
@@ -227,6 +220,7 @@ namespace HeroMed_API.DatabaseContext
                     Floor = 2,
                     Beds = 4,
                     Available = true,
+                    SalonNumber = 1,
                     SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb82"),
                 },
                 new Salon()
@@ -235,6 +229,7 @@ namespace HeroMed_API.DatabaseContext
                     Floor = 1,
                     Beds = 3,
                     Available = true,
+                    SalonNumber= 2,
                     SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb83") 
                 },
                 new Salon()
@@ -243,6 +238,7 @@ namespace HeroMed_API.DatabaseContext
                     Floor = 1,
                     Beds = 4,
                     Available = true,
+                    SalonNumber= 3,
                     SectionId = Guid.Parse("10261ba6-d3f9-48bb-b48f-12bf7a43bb83")
                 }
                 );
@@ -254,7 +250,7 @@ namespace HeroMed_API.DatabaseContext
                     Id = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08742"),
                     FirstName = "Mircea",
                     LastName = "Popa",
-                    BirthDate = new DateTimeOffset(new DateTime(year: 1999, month: 6, day: 13)),
+                    BirthDate = new DateTime(year: 1999, month: 6, day: 13),
                     Address = "Str. Nicolae Balcescu, Nr. 189, Blc. L6, Sc. A, Ap. 20",
                     Email = "mircea.popa@gmail.com",
                     PhoneNumber = "0751234567",
@@ -262,15 +258,15 @@ namespace HeroMed_API.DatabaseContext
                     EmergencyContactPhoneNumber = "0752345678",
                     SalonId = Guid.Parse("46589e47-e79f-417f-9e1a-410dd719f0e8"),
                     IssueDetails = "Some disease details.",
-                    EnrolledDate = new DateTimeOffset(new DateTime(year: 2022, month:11, day:28)),
-                    DischargeDate = new DateTimeOffset(new DateTime(year: 2022, month:12, day: 3))
+                    EnrolledDate = new DateTime(year: 2022, month:11, day:28),
+                    DischargeDate = new DateTime(year: 2022, month:12, day: 3)
                 },
                 new Patient()
                 {
                     Id = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08743"),
                     FirstName = "Radu",
                     LastName = "Voicu",
-                    BirthDate = new DateTimeOffset(new DateTime(year: 1997, month: 3, day: 11)),
+                    BirthDate = new DateTime(year: 1997, month: 3, day: 11),
                     Address = "Str. Nicolae Balcescu, Nr. 1, Blc. L4, Sc. B, Ap. 14",
                     Email = "mircea.popa@gmail.com",
                     PhoneNumber = "0752234567",
@@ -278,15 +274,15 @@ namespace HeroMed_API.DatabaseContext
                     EmergencyContactPhoneNumber = "0752345123",
                     SalonId = Guid.Parse("46589e47-e79f-417f-9e1a-410dd719f0e8"),
                     IssueDetails = "Some disease details. 2",
-                    EnrolledDate = new DateTimeOffset(new DateTime(year: 2022, month: 11, day: 28)),
-                    DischargeDate = new DateTimeOffset(new DateTime(year: 2022, month: 12, day: 3))
+                    EnrolledDate = new DateTime(year: 2022, month: 11, day: 28),
+                    DischargeDate = new DateTime(year: 2022, month: 12, day: 3)
                 },
                 new Patient()
                 {
                     Id = Guid.Parse("7b7e16ec-2672-4360-ad3d-4941d5d08744"),
                     FirstName = "Mircea2",
                     LastName = "Popa2",
-                    BirthDate = new DateTimeOffset(new DateTime(year: 2001, month: 6, day: 13)),
+                    BirthDate = new DateTime(year: 2001, month: 6, day: 13),
                     Address = "Str. Nicolae Balcescu, Nr. 189, Blc. L6, Sc. A, Ap. 20",
                     Email = "mircea.popa@gmail.com",
                     PhoneNumber = "0751232222",
@@ -294,8 +290,8 @@ namespace HeroMed_API.DatabaseContext
                     EmergencyContactPhoneNumber = "0758765432",
                     SalonId = Guid.Parse("46589e47-e79f-417f-9e1a-410dd719f0e8"),
                     IssueDetails = "Some disease details.",
-                    EnrolledDate = new DateTimeOffset(new DateTime(year: 2022, month: 11, day: 28)),
-                    DischargeDate = new DateTimeOffset(new DateTime(year: 2022, month: 12, day: 3))
+                    EnrolledDate = new DateTime(year: 2022, month: 11, day: 28),
+                    DischargeDate =new DateTime(year: 2022, month: 12, day: 3)
                 }
                 );
             #endregion

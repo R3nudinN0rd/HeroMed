@@ -1,5 +1,6 @@
 ﻿using HeroMed_API.DatabaseContext;
 using HeroMed_API.Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace HeroMed_API.Repositories.User
@@ -22,24 +23,25 @@ namespace HeroMed_API.Repositories.User
             return true;
         }
 
-        public void AddUser(Entities.User user)
+        public async Task<Entities.User> AddUserAsync(Entities.User user)
         {
             try
             {
                 _context.Users.Add(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return user;
             }
-            catch(ArgumentNullException)
+            catch(SqlException ex)
             {
-                throw new ArgumentException(nameof(user));
+                throw ex;
             }
         }
 
-        public void DeleteUserByUsername(string username)
+        public void DeleteUserByEmail(string email)
         {
             try
             {
-                var user = _context.Users.FirstOrDefault<Entities.User>(user => user.Username == username) ;
+                var user = _context.Users.FirstOrDefault<Entities.User>(user => user.Email == email) ;
                 if(user == null)
                 {
                     throw new ArgumentNullException(nameof(user));
@@ -47,9 +49,9 @@ namespace HeroMed_API.Repositories.User
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(username));
+                throw ex;
             }
         }
 
@@ -60,7 +62,7 @@ namespace HeroMed_API.Repositories.User
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
-            catch(Exception ex)
+            catch(SqlException ex)
             {
                 throw ex;
             }
@@ -81,9 +83,19 @@ namespace HeroMed_API.Repositories.User
             return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.EmployeeId == emplId);
         }
 
-        public async Task<Entities.User> GetUserByUsernameAsync(string username)
+        public async Task<Entities.User> GetUserForVerification(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Username == username);
+            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Email == email);
+        }
+
+        public async Task<Entities.User> GetUserForVerification(string email, string code)
+        {
+            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Email == email && user.VerificationCode == code);
+        } 
+
+        public async Task<Entities.User> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync<Entities.User>(user => user.Email == email);
         }
 
         public async Task<Entities.User> GetUserByIdAsync(Guid userId)
@@ -98,9 +110,9 @@ namespace HeroMed_API.Repositories.User
                 _context.Users.Update(user);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(user));
+                throw ex;
             }
         }
     }

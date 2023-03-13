@@ -14,7 +14,7 @@ namespace HeroMed_API.Controllers
     [ApiController]
     [Route("api/users")]
     [EnableCors("AllowOrigins")]
-    public class UserController:ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -27,8 +27,8 @@ namespace HeroMed_API.Controllers
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
-        [HttpGet,HttpHead]
-        public ActionResult<IEnumerable<Models.UserDTO>> GetAllUsers()
+        [HttpGet, HttpHead]
+        public async Task<ActionResult<IEnumerable<Models.UserDTO>>> GetAllUsers()
         {
             var usersFromRepo = _userRepository.GetAllUsersAsync().GetAwaiter().GetResult();
             if (!_validator.ValidateResult(usersFromRepo))
@@ -39,7 +39,7 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.UserDTO>>(usersFromRepo));
         }
         [HttpGet("id/{userId}", Name = "GetUSerById")]
-        public ActionResult<Models.UserDTO> GetUserById(Guid userId)
+        public async Task<ActionResult<Models.UserDTO>> GetUserById(Guid userId)
         {
             if (!_validator.ValidateGuid(userId))
             {
@@ -56,11 +56,11 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<UserDTO>(userFromRepo));
         }
         [HttpGet("/admins")]
-        public ActionResult<IEnumerable<Models.UserDTO>> GetAdmins()
+        public async Task<ActionResult<IEnumerable<Models.UserDTO>>> GetAdmins()
         {
             var usersFromRepo = _userRepository.GetAdminsAsync().GetAwaiter().GetResult();
 
-            if(!_validator.ValidateResult(usersFromRepo))
+            if (!_validator.ValidateResult(usersFromRepo))
             {
                 return NotFound();
             }
@@ -68,7 +68,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet("empl/{employeeId}")]
-        public ActionResult<Models.UserDTO> GetUserByEmplId(Guid employeeId)
+        public async Task<ActionResult<Models.UserDTO>> GetUserByEmplId(Guid employeeId)
         {
             if (!_validator.ValidateGuid(employeeId))
             {
@@ -85,11 +85,23 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<Models.UserDTO>(userFromRepo));
         }
 
+        [HttpGet("email/{userEmail}")]
+        public async Task<ActionResult<Models.UserDTO>> GetUserByEmail(string userEmail)
+        {
+            var userFromRepo = _userRepository.GetUserByEmailAsync(userEmail).GetAwaiter().GetResult();
+            if (!_validator.ValidateResult(userFromRepo))
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<Models.UserDTO>(userFromRepo));
+        }
+
         [HttpPost]
-        public ActionResult AddUser(InsertUserDTO userDTO)
+        public async Task<ActionResult> AddUser(InsertUserDTO userDTO)
         {
             Encryptor crypt = new Encryptor();
-            if(!_validator.ValidateUserToInsert(userDTO))
+            if (!_validator.ValidateUserToInsert(userDTO))
             {
                 return UnprocessableEntity();
             }
@@ -98,50 +110,42 @@ namespace HeroMed_API.Controllers
             user.Id = Guid.NewGuid();
             user.CreatedDate = DateTime.Now;
             user.Admin = false;
-            user.Password = crypt.CreateMD5Hash(user.Password);
-            _userRepository.AddUser(user);
+            await _userRepository.AddUserAsync(user);
 
             return CreatedAtRoute("GetUserById",
-                                  new {userId = user.Id },
+                                  new { userId = user.Id },
                                   userDTO);
         }
 
-        [HttpPut("userId")]
-        public ActionResult UpdateUser(Guid userId, UpdateUserDTO userDTO)
+        [HttpPut("{userId}")]
+        public async Task<ActionResult> UpdateUser(Guid userId, UpdateUserDTO userDTO)
         {
-            Encryptor crypt = new Encryptor();
-            if(!_validator.ValidateGuid(userId))
+            if (!_validator.ValidateGuid(userId))
             {
                 return BadRequest();
-            }
-
-            if (!_userRepository.UserExists(userId))
-            {
-                return NotFound();
             }
 
             var userFromRepo = _userRepository.GetUserByIdAsync(userId).GetAwaiter().GetResult();
             _mapper.Map(userDTO, userFromRepo);
-            userFromRepo.Password = crypt.CreateMD5Hash(userFromRepo.Password);
-            _userRepository.UpdateUser(userFromRepo);
 
+            _userRepository.UpdateUser(userFromRepo);
             return NoContent();
         }
 
-        [HttpDelete("username/{username}")]
-        public ActionResult DeleteUser(string username)
+        [HttpDelete("email/{email}")]
+        public async Task<ActionResult> DeleteUser(string email)
         {
-            if(username == "")
+            if(email == "")
             {
                 return BadRequest();
             }
-            _userRepository.DeleteUserByUsername(username);
+            _userRepository.DeleteUserByEmail(email);
 
             return Ok();
         }
 
         [HttpDelete("id/{userId}")]
-        public ActionResult DeleteUser(Guid userId)
+        public async Task<ActionResult> DeleteUser(Guid userId)
         {
             if (!_validator.ValidateGuid(userId))
             {

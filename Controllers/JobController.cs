@@ -26,7 +26,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Models.JobDTO>> GetAllJobs()
+        public async Task<ActionResult<IEnumerable<Models.JobDTO>>> GetAllJobs()
         {
             var jobsFromRepo = _jobRepository.GetAllJobsAsync().GetAwaiter().GetResult();
             if (!_validator.ValidateResult(jobsFromRepo))
@@ -36,8 +36,8 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<JobDTO>>(jobsFromRepo));
         }
 
-        [HttpGet("/job/{jobId}", Name = "GetJobById")]
-        public ActionResult<Models.JobDTO> GetJobById(Guid jobId)
+        [HttpGet("job/{jobId}", Name = "GetJobById")]
+        public async Task<ActionResult<Models.JobDTO>> GetJobById(Guid jobId)
         {
             if (!_validator.ValidateGuid(jobId))
             {
@@ -54,7 +54,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddJob(InsertJobDTO jobDTO)
+        public async Task<ActionResult> AddJob(InsertJobDTO jobDTO)
         {
             if (!_validator.ValidateJobToInsert(jobDTO))
             {
@@ -62,14 +62,14 @@ namespace HeroMed_API.Controllers
             }
             var job = _mapper.Map<Job>(jobDTO);
             job.Id = Guid.NewGuid();
-            _jobRepository.AddJob(job);
+            await _jobRepository.AddJobAsync(job);
             return CreatedAtRoute("GetJobById",
                                    new { jobId = job.Id},
                                    jobDTO);
         }
 
         [HttpPut("{jobId}")]
-        public ActionResult UpdateJob(Guid jobId, UpdateJobDTO jobDTO)
+        public async Task<ActionResult> UpdateJob(Guid jobId, UpdateJobDTO jobDTO)
         {
             if (!_validator.ValidateGuid(jobId))
             {
@@ -88,7 +88,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpDelete("{jobId}")]
-        public ActionResult DeleteJob(Guid jobId)
+        public async Task<ActionResult> DeleteJob(Guid jobId)
         {
             if (!_validator.ValidateGuid(jobId))
             {

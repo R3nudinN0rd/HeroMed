@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using HeroMed_API.DatabaseContext;
+using HeroMed_API.Entities;
+using HeroMed_API.Models;
 using HeroMed_API.Models.UpdateDTOs;
 using HeroMed_API.Repositories.Salon;
 using HeroMed_API.Validators;
@@ -25,7 +27,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Models.SalonDTO>> GetSalons()
+        public async Task<ActionResult<IEnumerable<Models.SalonDTO>>> GetSalons()
         {
             var salonsFromRepo = _salonRepository.GetAllSalonsAsync().GetAwaiter().GetResult();
             if (!_validator.ValidateResult(salonsFromRepo))
@@ -36,8 +38,8 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.SalonDTO>>(salonsFromRepo));
         }
 
-        [HttpGet("/salon/{sectionId}")]
-        public ActionResult<IEnumerable<Models.SalonDTO>> GetSalonsBySectionId(Guid sectionId)
+        [HttpGet("section/{sectionId}")]
+        public async Task<ActionResult<IEnumerable<Models.SalonDTO>>> GetSalonsBySectionId(Guid sectionId)
         {
             if (!_validator.ValidateGuid(sectionId))
             {
@@ -54,8 +56,8 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Models.SalonDTO>>(salonsFromRepo));
         }
 
-        [HttpGet("/salon/available")]
-        public ActionResult<IEnumerable<Models.SalonDTO>> GetAvailableSalons()
+        [HttpGet("available")]
+        public async Task<ActionResult<IEnumerable<Models.SalonDTO>>> GetAvailableSalons()
         {
             var salonsFromRepo = _salonRepository.GetAvailableSalonsAsync().GetAwaiter().GetResult();
             if (!_validator.ValidateResult(salonsFromRepo))
@@ -67,8 +69,8 @@ namespace HeroMed_API.Controllers
         }
 
 
-        [HttpGet("id/{id}")]
-        public ActionResult<Models.SalonDTO> GetSalonById(Guid id)
+        [HttpGet("id/{id}",Name = "GetSalonById")]
+        public async Task<ActionResult<Models.SalonDTO>> GetSalonById(Guid id)
         {
             if (!_validator.ValidateGuid(id))
             {
@@ -85,8 +87,39 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<Models.SalonDTO>(salonFromRepo));
         }
 
+        [HttpGet("patients/{id}")]
+        public async Task<ActionResult<int>> GetPatientsFromSalon(Guid id)
+        {
+            if (!_validator.ValidateGuid(id))
+            {
+                return BadRequest();
+            }
+
+            var numberOfPatients = _salonRepository.GetNumberOfPatients(id).GetAwaiter().GetResult();
+
+            return Ok(numberOfPatients);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddSalon(Models.InsertDTOs.InsertSalonDTO salonDTO)
+        {
+            if (!_validator.ValidateSalonToInsert(salonDTO))
+            {
+                return UnprocessableEntity();
+            }
+
+            var salon = _mapper.Map<Salon>(salonDTO);
+            salon.Id = Guid.NewGuid();
+
+            await _salonRepository.AddSalonAsync(salon);
+
+            return CreatedAtRoute("GetSalonById",
+                                  new { id = salon.Id },
+                                  salonDTO);
+        }
+
         [HttpPut("{salonId}")]
-        public ActionResult UpdateSalon(Guid salonId, UpdateSalonDTO salonDTO)
+        public async Task<ActionResult> UpdateSalon(Guid salonId, UpdateSalonDTO salonDTO)
         {
             if (!_validator.ValidateGuid(salonId))
             {
@@ -102,6 +135,17 @@ namespace HeroMed_API.Controllers
 
             _mapper.Map(salonDTO, salonFromRepo);
             _salonRepository.UpdateSalon(salonFromRepo);
+            return NoContent();
+        }
+        [HttpDelete("{salonId}")]
+        public async Task<ActionResult> DeleteSalon(Guid salonId)
+        {
+            if (!_validator.ValidateGuid(salonId))
+            {
+                return BadRequest();
+            }
+
+            _salonRepository.DeleteSalon(salonId);
             return NoContent();
         }
     }

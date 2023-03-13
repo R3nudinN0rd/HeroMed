@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HeroMed_API.Controllers
 {
+    /*tEST for merging*/
     [ApiController]
     [Route("/api/patient")]
     [EnableCors("AllowOrigins")]
@@ -27,7 +28,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Models.PatientDTO>> GetAllPatients()
+        public async Task<ActionResult<IEnumerable<Models.PatientDTO>>> GetAllPatients()
         {
             var patientsFromRepo = _patientRepository.GetAllPatientsAsync().GetAwaiter().GetResult();
             if(!_validator.ValidateResult(patientsFromRepo))
@@ -38,8 +39,8 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<IEnumerable<Patient>>(patientsFromRepo));
         }
 
-        [HttpGet("/id/{patientId}", Name = "GetPatientById")]
-        public ActionResult<Models.PatientDTO> GetPatientById(Guid patientId)
+        [HttpGet("id/{patientId}", Name = "GetPatientById")]
+        public async Task<ActionResult<Models.PatientDTO>> GetPatientById(Guid patientId)
         {
             if (!_validator.ValidateGuid(patientId))
             {
@@ -55,7 +56,25 @@ namespace HeroMed_API.Controllers
             return Ok(_mapper.Map<PatientDTO>(patientFromRepo));
         }
 
-        [HttpGet("/email/{email}")]
+        [HttpGet("section/{sectionId}")]
+        public async Task<ActionResult<Models.PatientDTO>> GetPatientBySectionId(Guid sectionId)
+        {
+            if (!_validator.ValidateGuid(sectionId))
+            {
+                return BadRequest();
+            }
+
+            var patientsFromRepo = _patientRepository.GetPatientsBySectionIdAsync(sectionId).GetAwaiter().GetResult();
+
+            if (!_validator.ValidateResult(patientsFromRepo))
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<PatientDTO>>(patientsFromRepo));
+        }
+
+        [HttpGet("email/{email}")]
         public ActionResult<Models.PatientDTO> GetPatientByEmail(string email)
         {
             if (!_validator.ValidateString(email))
@@ -74,7 +93,7 @@ namespace HeroMed_API.Controllers
 
         }
 
-        [HttpGet("/patientSalon/{salonId}")]
+        [HttpGet("patientSalon/{salonId}")]
         public ActionResult<IEnumerable<Models.PatientDTO>> GetPatientsBySalon(Guid salonId)
         {
             if (!_validator.ValidateGuid(salonId))
@@ -84,16 +103,11 @@ namespace HeroMed_API.Controllers
 
             var patientFromRepo = _patientRepository.GetPatientBySalonAsync(salonId).GetAwaiter().GetResult();
 
-            if (!_validator.ValidateResult(patientFromRepo))
-            {
-                return NotFound();
-            }
-
             return Ok(_mapper.Map<IEnumerable<PatientDTO>>(patientFromRepo));
         }
 
         [HttpPost]
-        public ActionResult AddPatient(InsertPatientDTO patientDTO)
+        public async Task<ActionResult> AddPatient(InsertPatientDTO patientDTO)
         {
             if (!_validator.ValidatePatientToInsert(patientDTO))
             {
@@ -102,7 +116,7 @@ namespace HeroMed_API.Controllers
 
             var patient = _mapper.Map<Patient>(patientDTO);
             patient.Id = Guid.NewGuid();
-            _patientRepository.AddPatient(patient);
+            await _patientRepository.AddPatientAsync(patient);
 
             return CreatedAtRoute("GetPatientById",
                                   new {patientId = patient.Id},
@@ -111,7 +125,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpPut("{patientId}")]
-        public ActionResult UpdatePatient(Guid patientId, UpdatePatientDTO patientDTO)
+        public async Task<ActionResult> UpdatePatient(Guid patientId, UpdatePatientDTO patientDTO)
         {
             if (!_validator.ValidateGuid(patientId))
             {
@@ -132,7 +146,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeletePatient(Guid id)
+        public async Task<ActionResult> DeletePatient(Guid id)
         {
             if (!_validator.ValidateGuid(id))
             {

@@ -1,6 +1,7 @@
 ﻿using HeroMed_API.DatabaseContext;
 using HeroMed_API.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 
 namespace HeroMed_API.Repositories.Job
 {
@@ -22,16 +23,17 @@ namespace HeroMed_API.Repositories.Job
             return true;
         }
 
-        public void AddJob(Entities.Job job)
+        public async Task<Entities.Job>AddJobAsync(Entities.Job job)
         {
             try
             {
                 _context.Jobs.Add(job);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return job;
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(job));
+                throw ex;
             }
         }
 
@@ -52,9 +54,9 @@ namespace HeroMed_API.Repositories.Job
                 _context.Jobs.Update(job);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException) 
+            catch (SqlException ex) 
             {
-                throw new ArgumentNullException(nameof(job));
+                throw ex;
             }
         }
 
@@ -65,9 +67,9 @@ namespace HeroMed_API.Repositories.Job
                 _context.Jobs.Remove(job);
                 _context.SaveChanges();
             }
-            catch (Exception)
+            catch (SqlException ex)
             {
-                throw new Exception(nameof(job));
+                throw ex;
             }
         }
     }

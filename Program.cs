@@ -8,7 +8,7 @@ using HeroMed_API.Repositories.Section;
 using HeroMed_API.Repositories.User;
 using HeroMed_API.Validators;
 using Microsoft.EntityFrameworkCore;
-using TransferServices.SMTP.Repository;
+using TransferServices.OAuth2Email.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 

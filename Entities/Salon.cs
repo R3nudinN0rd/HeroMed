@@ -17,6 +17,8 @@ namespace HeroMed_API.Entities
 
         [Required(ErrorMessage = "Available is a required field!")]
         public bool Available { get; set; }
+        [Required(ErrorMessage = "Salon number is a required field!")]
+        public int SalonNumber { get; set; }
 
         [Required(ErrorMessage = "Section is a required field!"), ForeignKey("SectionId")]
         public Section Section { get; set; }

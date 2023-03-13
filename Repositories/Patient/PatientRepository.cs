@@ -1,4 +1,5 @@
 ﻿using HeroMed_API.DatabaseContext;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace HeroMed_API.Repositories.Patient
@@ -21,16 +22,17 @@ namespace HeroMed_API.Repositories.Patient
             return true;
         }
 
-        public void AddPatient(Entities.Patient patient)
+        public async Task<Entities.Patient> AddPatientAsync(Entities.Patient patient)
         {
             try
             {
                 _context.Patients.Add(patient);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return patient;
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(patient));
+                throw ex;
             }
         }
 
@@ -43,9 +45,9 @@ namespace HeroMed_API.Repositories.Patient
                 _context.Patients.Remove(patient);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(id));
+                throw ex;
             }
         }
 
@@ -76,10 +78,28 @@ namespace HeroMed_API.Repositories.Patient
                 _context.Patients.Update(patient);
                 _context.SaveChanges();
             }
-            catch (ArgumentNullException)
+            catch (SqlException ex)
             {
-                throw new ArgumentNullException(nameof(patient));
+                throw ex;
             }
+        }
+
+        public async Task<IEnumerable<Entities.Patient>> GetPatientsBySectionIdAsync(Guid sectionId)
+        {
+            List<Entities.Patient> patients = new List<Entities.Patient>();
+            var salon = await _context.Salons.Where(s => s.SectionId== sectionId).ToListAsync();
+
+            foreach(var s in salon)
+            {
+                var patientsSalon = await _context.Patients.Where(p => p.SalonId == s.Id).ToListAsync();
+                
+                foreach(var p in patientsSalon)
+                {
+                    patients.Add(p);
+                }
+            }
+
+            return patients;
         }
     }
 }

@@ -27,14 +27,14 @@ namespace HeroMed_API.Controllers
 
 
         [HttpGet, HttpHead]
-        public ActionResult<IEnumerable<Models.EmployeeDTO>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<Models.EmployeeDTO>>> GetEmployees()
         {
             var employeeFromRepo = _employeeRepository.GetAllEmployeesAsync().GetAwaiter().GetResult();
             return Ok(_mapper.Map<IEnumerable<EmployeeDTO>>(employeeFromRepo));
         }
 
         [HttpGet("{employeeId}", Name = "GetEmployeeById")]
-        public ActionResult<Models.EmployeeDTO> GetEmployeeById(Guid employeeId)
+        public async Task<ActionResult<Models.EmployeeDTO>> GetEmployeeById(Guid employeeId)
         {
             if (!_validators.ValidateGuid(employeeId))
             {
@@ -48,8 +48,26 @@ namespace HeroMed_API.Controllers
 
             return Ok(_mapper.Map<EmployeeDTO>(employeeFromRepo));
         }
-        [HttpGet("/emailEmployee/{email}",Name = "GetEmployeeByEmail")]
-        public ActionResult<Models.EmployeeDTO> GetEmployeeByEmail(string email)
+
+        [HttpGet("section/{sectionId}")]
+        public async Task<ActionResult<Models.EmployeeDTO>> GetEmployeesBySectionId(Guid sectionId) 
+        {
+            if (!_validators.ValidateGuid(sectionId))
+            {
+                return BadRequest();
+            }
+            var employeesFromRepo = _employeeRepository.GetEmployeesBySectionIdAsync(sectionId).GetAwaiter().GetResult();
+
+            if (!_validators.ValidateResult(employeesFromRepo))
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<IEnumerable<EmployeeDTO>>(employeesFromRepo));
+        }
+
+
+        [HttpGet("emailEmployee/{email}",Name = "GetEmployeeByEmail")]
+        public async Task<ActionResult<Models.EmployeeDTO>> GetEmployeeByEmail(string email)
         {
             if (!_validators.ValidateString(email))
             {
@@ -57,7 +75,6 @@ namespace HeroMed_API.Controllers
             }
             var employeeFromRepo = _employeeRepository.GetEmployeeByEmailAsync(email).GetAwaiter().GetResult();
             
-            if(!_validators.ValidateResult(employeeFromRepo))
             if(!_validators.ValidateResult(employeeFromRepo))
             {
                 return NotFound();
@@ -67,23 +84,56 @@ namespace HeroMed_API.Controllers
 
         }
 
+        [HttpGet("noaccountemployees")]
+        public async Task<ActionResult<IEnumerable<Models.EmployeeDTO>>> GetEmployeesWithoutAccount()
+        {
+            var employeesFromRepo = _employeeRepository.GetEmployeesWithoutAccount().GetAwaiter().GetResult();
+            if (!_validators.ValidateResult(employeesFromRepo))
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<Employee>>(employeesFromRepo));
+        }
+
+        [HttpGet("alreadyTakeEmailAddress/{emailAddress}")]
+        public async Task<ActionResult<bool>> GetExistenceOfEmail(string emailAddress)
+        {
+            var employeesFromRepo = _employeeRepository.GetEmployeesWithoutAccount().GetAwaiter().GetResult();
+            if (!_validators.ValidateResult(employeesFromRepo))
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
+        }
+
+
         [HttpPost]
-        public ActionResult CreateEmployee(InsertEmployeeDTO employeeDTO)
+        public async Task<ActionResult> CreateEmployee(InsertEmployeeDTO employeeDTO)
         {
            if (!_validators.ValidateEmployeeToInsert(employeeDTO))
            {
                return UnprocessableEntity();
            }
-           var employee = _mapper.Map<Employee>(employeeDTO);
+            var verifyEmail = _employeeRepository.GetEmployeeByEmailAsync(employeeDTO.Email).GetAwaiter().GetResult();
+            if(verifyEmail!= null)
+            {
+                return NoContent();
+            }
+
+            var employee = _mapper.Map<Employee>(employeeDTO);
             employee.Id = Guid.NewGuid();
-            _employeeRepository.AddEmployee(employee);
+            await _employeeRepository.AddEmployeeAsync(employee);
             return CreatedAtRoute("GetEmployeeById",
                                   new { employeeId = employee.Id },
                                   employeeDTO);
         }
 
         [HttpPut("{employeeId}")]
-        public ActionResult UpdateEmployee(Guid employeeId, UpdateEmployeeDTO employee)
+        public async Task<ActionResult> UpdateEmployee(Guid employeeId, UpdateEmployeeDTO employee)
         {
             if (!_validators.ValidateGuid(employeeId))
             {
@@ -104,7 +154,7 @@ namespace HeroMed_API.Controllers
         }
 
         [HttpDelete("id/{employeeId}")]
-        public ActionResult DeleteEmployee(Guid employeeId)
+        public async Task<ActionResult> DeleteEmployee(Guid employeeId)
         {
             if (!_validators.ValidateGuid(employeeId))
             {

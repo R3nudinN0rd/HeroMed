@@ -1,5 +1,7 @@
 ﻿using HeroMed_API.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Data.SqlClient;
 using System.Runtime.Remoting;
 
 namespace HeroMed_API.Repositories.Employee
@@ -20,14 +22,15 @@ namespace HeroMed_API.Repositories.Employee
             return false;
         }
 
-        public void AddEmployee(Entities.Employee employee)
+        public async Task<Entities.Employee> AddEmployeeAsync(Entities.Employee employee)
         {
             try
             {
                 _context.Employees.Add(employee);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                return employee;
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 throw ex;
             }
@@ -40,18 +43,20 @@ namespace HeroMed_API.Repositories.Employee
                 _context.Employees.Remove(employee);
                 _context.SaveChanges();
             }
-            catch(Exception) 
+            catch(SqlException ex) 
             {
-                throw new Exception(nameof(employee));
+                throw ex;
             }
         }
 
         public async Task<IEnumerable<Entities.Employee>> GetAllEmployeesAsync()
         {
-            var entity = await _context.Employees.ToListAsync();
-            return entity;
+            return await _context.Employees.ToListAsync();
         }
-
+        public async Task<IEnumerable<Entities.Employee>> GetEmployeesBySectionIdAsync(Guid sectionId)
+        {
+            return await _context.Employees.Where(e => e.SectionId == sectionId).ToListAsync();
+        }
         public async Task<Entities.Employee> GetEmployeeByEmailAsync(string email)
         {
             return await _context.Employees.FirstOrDefaultAsync<Entities.Employee>(e => e.Email == email);
@@ -62,6 +67,34 @@ namespace HeroMed_API.Repositories.Employee
             return await _context.Employees.FirstOrDefaultAsync<Entities.Employee>(e => e.Id == id);
         }
 
+        public async Task<IEnumerable<Entities.Employee>> GetEmployeesWithoutAccount()
+        {
+            var employees = await _context.Employees.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+
+            List<Entities.Employee> results = new List<Entities.Employee>();
+
+            foreach(var employee in employees)
+            {
+                bool found = false;
+                foreach(var user in users)
+                {
+                    if(employee.Id == user.EmployeeId)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if(found == false)
+                {
+                    results.Add(employee);
+                }
+            }
+
+            return results;
+        }
+
+
         public void UpdateEmployee(Entities.Employee employee)
         {
             try
@@ -69,11 +102,12 @@ namespace HeroMed_API.Repositories.Employee
                 _context.Employees.Update(employee);
                 _context.SaveChanges();
             }
-            catch(Exception)
+            catch(SqlException ex)
             {
-                throw new Exception(nameof(employee));
+                throw ex;
             }
         }
+
 
     }
 }
