@@ -5,7 +5,6 @@ using System.Net.Http.Headers;
 using System;
 using System.IO;
 using HeroMed_API.Helpers;
-
 namespace HeroMed_API.Controllers.Reporting
 {
     [ApiController]
@@ -15,10 +14,9 @@ namespace HeroMed_API.Controllers.Reporting
     {
 
         [HttpGet("patients")]
-        public ActionResult DownloadReportAsPDF()
+        public ActionResult DownloadReportAsPDF(string reportName, Guid? patientId )
         {
-
-            return Ok(ReportDownloader.GenerateSSRSReport("PatientsReport").Result);
+            return Ok(ReportDownloader.GenerateSSRSReport(reportName, patientId).Result);
         }
 
 

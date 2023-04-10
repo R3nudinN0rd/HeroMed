@@ -11,7 +11,7 @@ namespace HeroMed_API.Helpers
         const string SSRSReportExecutionUrl = "http://EN1311605/ReportServer/ReportExecution2010.asmx?wsdl";
         const string SSRSFolderPath = "Reports";
 
-        public async static Task<byte[]> GenerateSSRSReport(string ReportName)
+        public async static Task<byte[]> GenerateSSRSReport(string ReportName, Guid? patientIdValue)
         {
             var binding = new BasicHttpBinding(BasicHttpSecurityMode.TransportCredentialOnly);
             binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Ntlm;
@@ -19,21 +19,32 @@ namespace HeroMed_API.Helpers
 
             //Create the execution service SOAP Client
             var rsExec = new ReportExecutionServiceSoapClient(binding, new EndpointAddress(SSRSReportExecutionUrl));
-            
             //Setup access credentials.
             var clientCredentials = new NetworkCredential(SSRSUsername, SSRSPassword, ".");
+
             if (rsExec.ClientCredentials != null)
             {
                 rsExec.ClientCredentials.Windows.AllowedImpersonationLevel = System.Security.Principal.TokenImpersonationLevel.Impersonation;
                 rsExec.ClientCredentials.Windows.ClientCredential = clientCredentials;
+                if (patientIdValue != null)
+                {
+                    ParameterValue[] parameters = new ParameterValue[1];
+                    parameters[0] = new ParameterValue();
+                    parameters[0].Name = "patientId";
+                    parameters[0].Value = patientIdValue.ToString();
+
+                    await rsExec.SetExecutionParametersAsync(null, null, parameters, "en-us");
+                }
+                else
+                {
+                    await rsExec.SetExecutionParametersAsync(null, null, null, "en-us");
+                }
             }
 
             //This handles the problem of "Missing session identifier"
             rsExec.Endpoint.EndpointBehaviors.Add(new ReportingServicesEndpointBehavior());
 
             await rsExec.LoadReportAsync(null, "/" + SSRSFolderPath + "/" + ReportName, null);
-
-            await rsExec.SetExecutionParametersAsync(null, null, null, "en-us");
 
             //run the report
             const string deviceInfo = @"<DeviceInfo><Toolbar>False</Toolbar></DeviceInfo>";
