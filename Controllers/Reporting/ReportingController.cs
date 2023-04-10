@@ -13,7 +13,7 @@ namespace HeroMed_API.Controllers.Reporting
     public class ReportingController:ControllerBase
     {
 
-        [HttpGet("patients")]
+        [HttpGet]
         public ActionResult DownloadReportAsPDF(string reportName, Guid? patientId )
         {
             return Ok(ReportDownloader.GenerateSSRSReport(reportName, patientId).Result);
