@@ -1,10 +1,1 @@
-{
-  "access_token": "ya29.a0AVvZVsqEmGjeJYBDIgFH-CA9EC6BRgHvMj9A3OHcL8HPTTmeuBZRCuyAprIRVlwz14a-WhxPXQmWKNYgcpMvyHDCd-KcBbz1ZjfFkvLnEXVl258JfBcSExjrvzmvJAVbPLbCDdwpiazeX5aEp4uoUk-LFYNEUwHRwAaCgYKASASARASFQGbdwaIqtHfr3utK_lnvi-Yj9i94w0169",
-  "token_type": "Bearer",
-  "expires_in": 3599,
-  "refresh_token": "1//090U2AKtAGNsKCgYIARAAGAkSNwF-L9Ir1mIGjjW2vFVUG2saiiopVrq8cbd-aKQtRu0RO7D8ctdHEihErsyVxRtgH5xVnykCiGs",
-  "scope": "https://www.googleapis.com/auth/gmail.send",
-  "Issued": "2023-03-13T21:21:54.224+02:00",
-  "IssuedUtc": "2023-03-13T19:21:54.224Z"
-
-}
+{"access_token":"ya29.a0Ael9sCOwmSNE3-NnwBusSbUq3rTmDZ9fDtSCIVbB8k2y8mNwmz1QzPV1uwyOXUUSlNNc0x_DGcwjAEa19Tp2CRmEJJy7-Dee5tzT513t43xTnIHsKyfOOOwb6MBWIWv0cyvu9APTIagM8TwVfj1ljQdqrxoPSmbM5gaCgYKASoSARASFQF4udJh04C0i7kKudlRIEH7ly0NNw0169","token_type":"Bearer","expires_in":3599,"refresh_token":"1//090U2AKtAGNsKCgYIARAAGAkSNwF-L9Ir1mIGjjW2vFVUG2saiiopVrq8cbd-aKQtRu0RO7D8ctdHEihErsyVxRtgH5xVnykCiGs","scope":"https://www.googleapis.com/auth/gmail.send","Issued":"2023-04-04T14:15:32.223+03:00","IssuedUtc":"2023-04-04T11:15:32.223Z"}
