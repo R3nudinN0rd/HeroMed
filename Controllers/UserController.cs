@@ -100,7 +100,6 @@ namespace HeroMed_API.Controllers
         [HttpPost]
         public async Task<ActionResult> AddUser(InsertUserDTO userDTO)
         {
-            Encryptor crypt = new Encryptor();
             if (!_validator.ValidateUserToInsert(userDTO))
             {
                 return UnprocessableEntity();
