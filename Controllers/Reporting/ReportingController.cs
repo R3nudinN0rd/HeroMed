@@ -16,7 +16,10 @@ namespace HeroMed_API.Controllers.Reporting
         [HttpGet]
         public ActionResult DownloadReportAsPDF(string reportName, Guid? patientId )
         {
-            return Ok(ReportDownloader.GenerateSSRSReport(reportName, patientId).Result);
+            //var result = ReportDownloader.GenerateSSRSReport(reportName, patientId).Result;
+            string path = "C:\\Users\\r3nud\\source\\repos\\Reports\\" + reportName+"\\"+reportName+"-"+patientId+".pdf";
+            byte[] result = System.IO.File.ReadAllBytes(path);
+            return File(result, System.Net.Mime.MediaTypeNames.Application.Pdf, reportName+"-"+patientId);
         }
 
 

@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using HeroMed_API.Repositories.User;
+using HeroMed_API.TransferService.SMTP.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using SMTPService.Entities;
-using SMTPService.Repositories;
+using SMTPService.Repository;
 
 namespace HeroMed_API.Controllers.SMTP
 {
