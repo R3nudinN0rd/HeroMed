@@ -5,6 +5,7 @@ using HeroMed_API.Repositories.Patient;
 using HeroMed_API.Repositories.PatientEmployee;
 using HeroMed_API.Repositories.Salon;
 using HeroMed_API.Repositories.Section;
+using HeroMed_API.Repositories.Statistics;
 using HeroMed_API.Repositories.User;
 using HeroMed_API.Validators;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ builder.Services.AddScoped<ISectionRepository, SectionRepository>();
 builder.Services.AddScoped<ISalonRepository, SalonRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientEmployeeRepository, PatientEmployeeRepository>();
+builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
 #endregion
 
 #region MicellaneousServices
